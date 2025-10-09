@@ -8,7 +8,6 @@
 #SBATCH --output=logs/test_run/%x.%j.out
 #SBATCH --constraint="gpu_a100_40gb|gpu_a100_80gb|gpu_l40s|gpu_l40s"
 #SBATCH --error=logs/test_run/%x.%j.err
-
 #SBATCH --exclude=cn8,cn14,cn15,cn16,cn17,desktop[1-16]
 
 set -euo pipefail
