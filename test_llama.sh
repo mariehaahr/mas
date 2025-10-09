@@ -1,5 +1,5 @@
 #!/bin/bash
-#SBATCH --job-name=llama
+#SBATCH --job-name=environ
 #SBATCH --partition=acltr
 #SBATCH --gres=gpu:1
 #SBATCH --cpus-per-task=4
@@ -15,17 +15,13 @@ set -euo pipefail
 
 echo "Host: $(hostname)"
 
-PROJ="/home/rp-fril-mhpe/rp"
+PROJ="/home/fril/mas"
 cd "$PROJ"
-
-# source /home/mhpe/.env
-
-source /home/rp-fril-mhpe/rp/.venv/bin/activate
 
 uv sync --python 3.12
 uv remove pynvml
 uv add nvidia-ml-py
 
-python3 -V
-python -V
-python3 /home/rp-fril-mhpe/rp/test_llama.py
+# python3 -V
+# python -V
+# python3 /home/rp-fril-mhpe/rp/test_llama.py
