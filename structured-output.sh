@@ -9,7 +9,14 @@
 #SBATCH --error=logs/%x.%j.err
 #SBATCH --constraint="gpu_rtx8000|gpu_rtx6000|gpu_l40s|gpu_a100_40gb"
 
+echo "Host: $(hostname)"
+
 set -euo pipefail
+
+source /home/fril/.env
+
+#export HF_HOME=$HOME/.cache/huggingface #run offline
+#export HF_HUB_OFFLINE=1 # run offline
 
 uv sync 
 uv run src/simple-job.py
