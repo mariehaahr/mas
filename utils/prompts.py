@@ -5,7 +5,6 @@ from typing import List, Dict
 
 SARCASTIC_SCHEMA = OutputSarc.model_json_schema()
 
-
 SYSTEM_JSON_GUIDED_R0 = (
     "Return ONLY a minified JSON object that conforms to this schema:\n"
     f"{json.dumps(SARCASTIC_SCHEMA, ensure_ascii=False)}\n\n"

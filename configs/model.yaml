@@ -1,7 +1,0 @@
-# vLLM engine configuration
-model: meta-llama/Meta-Llama-3-8B-Instruct
-
-# Reproducibility
-seed: 0
-quantization: bitsandbytes # set to null for full precision
-dtype: null               

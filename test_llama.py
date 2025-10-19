@@ -6,7 +6,6 @@ from dotenv import load_dotenv
 # access token from hf
 load_dotenv("/home/mhpe/.env")
 
-
 def main():
     print("torch", torch.__version__, "cuda?", torch.cuda.is_available(), "vllm", vllm.__version__)
     start = time.time()
