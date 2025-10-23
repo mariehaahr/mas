@@ -19,5 +19,5 @@ export HF_HUB_OFFLINE=1 # run offline
 export TRANSFORMERS_OFFLINE=1
 
 uv sync 
-uv run run-eval.py
+uv run run-eval.py --model_name llama-3.1-8b
 # uv run src/structured-output.py
