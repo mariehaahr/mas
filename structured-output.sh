@@ -13,11 +13,11 @@ echo "Host: $(hostname)"
 
 set -euo pipefail
 
-source /home/fril/.env
 
-#export HF_HOME=$HOME/.cache/huggingface #run offline
-#export HF_HUB_OFFLINE=1 # run offline
+export HF_HOME=$HOME/.cache/huggingface #run offline
+export HF_HUB_OFFLINE=1 # run offline
+export TRANSFORMERS_OFFLINE=1
 
 uv sync 
-uv run src/simple-job.py
+uv run run-eval.py
 # uv run src/structured-output.py

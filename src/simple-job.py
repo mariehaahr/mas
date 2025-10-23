@@ -2,7 +2,7 @@ from vllm import LLM, SamplingParams
 import torch
 from dotenv import load_dotenv
 
-load_dotenv('/home/fril/.env')
+load_dotenv('/home/mhpe/.env')
 
 def main():
     print("torch", torch.__version__, "cuda?", torch.cuda.is_available())
