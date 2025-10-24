@@ -1,0 +1,81 @@
+id,input_text,output_text,valid_json
+0,They were too brown to be real Christians,"{
+  ""label"": ""sarcastic"",
+  ""explanation"": ""The claim suggests that the color of the Christians is a joke, implying that the Christians are not real. The sarcasm is clear in the implication that the color is a joke, suggesting that the claim is not taken seriously.""
+}",True
+1,At first I thought he jammed it by inserting his finger into the trigger guard behind the finger.,"{
+  ""label"": ""literal"",
+  ""explanation"": ""The claim is a straightforward statement of fact, describing a literal action. There is no indication of sarcasm.""
+}",True
+2,The Browns don't know shit when it comes to QB's.,"{
+  ""label"": ""literal"",
+  ""explanation"": ""The claim is a straightforward statement about the Browns' knowledge of quarterbacks. It does not contain any irony or sarcasm.""
+}",True
+3,Mario didn't play as many games,"{
+  ""label"": ""literal"",
+  ""explanation"": ""The claim is a straightforward statement of fact. Mario is known for playing many games, so the statement is not meant to be sarcastic.""
+}",True
+4,DILLIGAS,"{
+  ""label"": ""literal"",
+  ""explanation"": ""The claim 'DILLIGAS' is a single word and does not contain any sarcasm or irony. It is simply a word with no hidden meaning or implication.""
+}",True
+5,The true threat to America,"{
+  ""label"": ""literal"",
+  ""explanation"": ""The claim is a straightforward statement of fact, not a sarcastic remark. It does not contain any irony or mockery, but rather a straightforward assertion of a fact.""
+}",True
+6,"Amazing, there was actually a time when Xbox Live didn't exist.","{
+  ""label"": ""literal"",
+  ""explanation"": ""The claim is a straightforward statement of fact, not a sarcastic remark. The speaker is simply stating that Xbox Live was once a thing, without any implication of irony or mockery.""
+}",True
+7,bakabakabakagaijin wrote: Not poop,"{
+  ""label"": ""literal"",
+  ""explanation"": ""The claim is a literal statement, not a sarcastic one. It is a direct statement of a fact, not a sarcastic remark.""
+}",True
+8,everybody wants some,"{
+  ""label"": ""literal"",
+  ""explanation"": ""The claim is a straightforward statement of fact, suggesting that everyone desires something. It does not contain any irony or sarcasm.""
+}",True
+9,"Synical ploy for SF, there must be an election coming up!","{
+  ""label"": ""sarcastic"",
+  ""explanation"": ""The claim suggests that there must be an election coming up, implying that the speaker is not interested in the topic at hand. The use of 'Synical ploy' also suggests a mocking tone, further indicating sarcasm.""
+}",True
+10,Is there anything he accuses Hillary of that he is not guilty of?,"{
+  ""label"": ""literal"",
+  ""explanation"": ""The claim is a straightforward statement of fact, not a sarcastic remark. It does not contain any irony or mockery. The speaker is simply stating a fact about Hillary Clinton.""
+}",True
+11,if you're not even lvl 30 on your main account no you are not ready,"{
+  ""label"": ""sarcastic"",
+  ""explanation"": ""The claim suggests that someone is not ready unless they are at level 30 on their main account, implying that being at level 30 is a prerequisite for readiness. This is a humorous or sarcastic statement, suggesting that the person is being overly critical or dismissive of the level 30 threshold.""
+}",True
+12,because galaxy collapse is a fkin hilarious meme and if you disagree you're obvs wrong,"{
+  ""label"": ""sarcastic"",
+  ""explanation"": ""The claim uses sarcasm by implying that the idea of a galaxy collapse is a humorous meme, but then immediately following with a statement that suggests the claimant is correct. This creates a contradiction, which is a common characteristic of sarcasm.""
+}",True
+13,That title belongs to Joe Warren.,"{
+  ""label"": ""literal"",
+  ""explanation"": ""The title 'That title belongs to Joe Warren' is a straightforward statement of fact, not a sarcastic remark.""
+}",True
+14,There will be 1 more overlap between port and essenjection next week too,"{
+  ""label"": ""literal"",
+  ""explanation"": ""The claim is a straightforward statement of a potential future event. It does not contain any irony, sarcasm, or other forms of irony that would suggest sarcasm.""
+}",True
+15,Old Warner Brothers Cartoons.,"{
+  ""label"": ""literal"",
+  ""explanation"": ""The claim is a straightforward statement about a specific type of cartoon, without any indication of sarcasm.""
+}",True
+16,It's a fake according to Aston Martin!,"{
+  ""label"": ""literal"",
+  ""explanation"": ""The claim is a straightforward statement of fact, not a sarcastic remark. It does not contain any irony or mockery.""
+}",True
+17,Light tank?,"{
+  ""label"": ""literal"",
+  ""explanation"": ""The term 'light tank' is a straightforward description of a specific type of armored vehicle, without any implication of sarcasm.""
+}",True
+18,Can confirm they were at the scrimmage.,"{
+  ""label"": ""literal"",
+  ""explanation"": ""The claim is a straightforward statement of fact, confirming attendance at a scrimmage. There is no indication of sarcasm.""
+}",True
+19,"Would be an exceedingly easy website to make responsive as well, no real complexities in the design.","{
+  ""label"": ""literal"",
+  ""explanation"": ""The claim is a straightforward statement of fact, suggesting that it would be easy to make a website responsive. There is no indication of sarcasm or irony.""
+}",True

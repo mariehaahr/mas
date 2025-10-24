@@ -20,17 +20,17 @@ def ensure_local_model(
     Ensure a model repo is present locally and return its path.
     - repo_id: e.g. "meta-llama/Meta-Llama-3-8B-Instruct"
     """
-
-    local_dir = f'~/.cache/huggingface/hub/{_sanitize_repo_id(repo_id)}'
+    home_env = pathlib.Path.home()
+    local_dir = pathlib.Path(f'{home_env}/.cache/huggingface/hub/{_sanitize_repo_id(repo_id)}')
+    san = _sanitize_repo_id(repo_id)
 
     # If the directory already exists and is non-empty, assume it’s usable
     if local_dir.exists() and any(local_dir.iterdir()):
         return local_dir
     
 
-
     cmd = [
-        "huggingface-cli", "download", repo_id,
+        "hf", "download", repo_id,
         "--local-dir", str(local_dir),
     ]
 
@@ -41,7 +41,7 @@ def ensure_local_model(
 
 def init_llm(model_cfg: dict) -> LLM:
     return LLM(
-        model_cfg=model_cfg['model'],
+        model=model_cfg['model'],
         quantization=model_cfg['quantization'],
         seed=model_cfg['seed'],
         dtype=model_cfg.get('dtype', None),

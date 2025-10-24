@@ -4,7 +4,6 @@ from typing import List, Dict, Any
 
 def write_jsonl(records: List[Dict[str, Any]], path: pathlib.Path):
     path.parent.mkdir(parents=True, exist_ok=True) 
-
     with path.open('w', encoding='utf-8') as file: 
         for r in records:
             file.write(json.dumps(r, ensure_ascii=False) + '\n')
