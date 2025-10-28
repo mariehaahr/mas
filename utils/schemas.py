@@ -9,3 +9,8 @@ class LabelSarc(str, Enum):
 class OutputSarc(BaseModel):
     label: LabelSarc
     explanation: str
+    confidence: int
+
+class OutputSarcRound2(BaseModel):
+    label: LabelSarc
+    confidence: int
