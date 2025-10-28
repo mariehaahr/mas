@@ -1,9 +1,11 @@
-from .schemas import OutputSarc
+from .schemas import OutputSarc, OutputSarcRound2
 import json 
 from typing import List, Dict
 
 
 SARCASTIC_SCHEMA = OutputSarc.model_json_schema()
+SARCASTIC_SCHEMA_ROUND2 = OutputSarcRound2.model_json_schema()
+
 
 SYSTEM_JSON_GUIDED_R1 = (
     "Return ONLY a minified JSON object that conforms to this schema:\n"
@@ -18,7 +20,7 @@ SYSTEM_JSON_GUIDED_R1 = (
 
 SYSTEM_JSON_GUIDED_R2 = (
     "Return ONLY a minified JSON object that conforms to this schema:\n"
-    f"{json.dumps(SARCASTIC_SCHEMA, ensure_ascii=False)}\n\n"
+    f"{json.dumps(SARCASTIC_SCHEMA_ROUND2, ensure_ascii=False)}\n\n"
     "Rules:\n"
     "- Keys: label, confidence.\n"
     "- label MUST be one of: 'sarcastic', 'literal'.\n"
@@ -44,7 +46,7 @@ USER_R2 = ( "Task: Is this claim sarcastic or literal?\n"
 
 def build_conversations(
     examples: List[Dict[str, str]],
-    system_prompt: str = SYSTEM_JSON_GUIDED_R1,
+    system_prompt: str = SYSTEM_JSON_GUIDED_R1,             # this can be changed in run eval to R2
     user_template: str = USER_R1) -> List[List[Dict[str, str]]]:
 
     '''

@@ -1,11 +1,11 @@
 from dotenv import load_dotenv
 import argparse, pathlib
 from utils.data import load_claims_text, load_claims_batches
-from utils.prompts import build_conversations, SYSTEM_JSON_GUIDED_R1, USER_R1
+from utils.prompts import build_conversations, SYSTEM_JSON_GUIDED_R2, USER_R2
 from utils.models import load_yaml, init_llm, init_sampling_params, ensure_local_model
 from utils.runner import run_inference
 from utils.io import write_csv, write_jsonl
-from utils.prompts import OutputSarc
+from utils.prompts import OutputSarcRound2
 
 
 home_env = pathlib.Path.home() / ".env"
@@ -27,10 +27,10 @@ def main():
                     default='/results/'),
     ap.add_argument('--system', 
                     help = 'System prompt string',
-                    default=SYSTEM_JSON_GUIDED_R1)
+                    default=SYSTEM_JSON_GUIDED_R2)
     ap.add_argument('--user', 
                     help= 'User prompt string',
-                    default=USER_R1)
+                    default=USER_R2)
     ap.add_argument('--batch_size',
                     help='Batch size to process dataset in',
                     type = int,
@@ -86,7 +86,7 @@ def main():
             user_template=args.user)
 
         # run inference 
-        texts, parsed, per_item = run_inference(llm, conversations=conversations, sampling=sampling, json_format=OutputSarc)
+        texts, parsed, per_item = run_inference(llm, conversations=conversations, sampling=sampling, json_format=OutputSarcRound2)
 
         rows = [
         {'id': ex['id'], 'input_text': ex['text'], 'output_text': t, 'valid_json': p is not None, 'parsed': p} for ex, t, p in zip(examples, texts, parsed)

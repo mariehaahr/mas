@@ -3,13 +3,13 @@ from typing import List, Dict, Any, Tuple
 from pydantic import ValidationError
 from vllm import LLM 
 from vllm.sampling_params import SamplingParams 
-from .prompts import OutputSarc
 
-
+# check, works for both round 1 and round 2
 def run_inference(
     llm: LLM, 
     conversations: List[List[Dict[str, str]]],
-    sampling: SamplingParams) -> Tuple[List[str], List[Dict[str, Any] | None], float]:
+    sampling: SamplingParams,
+    json_format) -> Tuple[List[str], List[Dict[str, Any] | None], float]:
     
     t0 = time.time()
     outs = llm.chat(messages=conversations, sampling_params=sampling)
@@ -21,7 +21,7 @@ def run_inference(
     for txt in texts:
         try:
             obj = json.loads(txt)
-            parsed.append(OutputSarc(**obj).model_dump())
+            parsed.append(json_format(**obj).model_dump())
         except(json.JSONDecodeError, ValidationError, KeyError, TypeError):
             parsed.append(None)
 
