@@ -74,8 +74,8 @@ def main():
     outdir = pathlib.Path(args.outdir)
     outdir.mkdir(parents = True, exist_ok = True)
     
-    jsonl_path = outdir / f'{args.model_name}.jsonl'
-    csv_path = outdir / f'{args.model_name}.csv'
+    jsonl_path = outdir / f'{args.model_name}_round2.jsonl'
+    csv_path = outdir / f'{args.model_name}:_round2.csv'
 
     for batch in load_claims_batches(path = args.dataset_path, start = args.idx_start, batch_size = args.batch_size, limit=args.limit):
 
