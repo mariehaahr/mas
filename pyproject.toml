@@ -10,6 +10,7 @@ dependencies = [
   "dotenv>=0.9.9",
   "bitsandbytes==0.48.1",
   "nvidia-ml-py>=13.580.82",
+  "pandas>=2.3.3",
 ]
 
 # Tell uv to fetch PyTorch packages from the CUDA 12.6 index on Linux.
