@@ -18,7 +18,7 @@ def main():
                     help = 'Short name of model from configs/models.yaml')
     ap.add_argument('--dataset_path', 
                     help='Path to dataset', 
-                    default='data/sarc/train_text.txt')
+                    default='data/sarc/sarcasm.txt')
     ap.add_argument('--decoding_cfg', 
                     help='Path to YAML file with sampling params and guided decoding toggle',
                     default='configs/decoding.yaml')
