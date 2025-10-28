@@ -18,7 +18,11 @@ def main():
                     help = 'Short name of model from configs/models.yaml')
     ap.add_argument('--dataset_path', 
                     help='Path to dataset', 
-                    default='data/sarc/sarcasm.txt')
+                    default='data/sarc/sarcasm.csv')
+    ap.add_argument('--repetition',
+                    help='Number of times a model is presented a specific claim.',
+                    type=int,
+                    default=1)
     ap.add_argument('--decoding_cfg', 
                     help='Path to YAML file with sampling params and guided decoding toggle',
                     default='configs/decoding.yaml')
@@ -41,7 +45,7 @@ def main():
     ap.add_argument('-idx_start',
                     help='Idx of row to start from in dataset',
                     type=int,
-                    default=None)
+                    default=0)
 
     args = ap.parse_args()
 
@@ -74,8 +78,8 @@ def main():
     outdir = pathlib.Path(args.outdir)
     outdir.mkdir(parents = True, exist_ok = True)
     
-    jsonl_path = outdir / f'{args.model_name}.jsonl'
-    csv_path = outdir / f'{args.model_name}.csv'
+    jsonl_path = outdir / f'{model_name}.jsonl'
+    csv_path = outdir / f'{model_name}.csv'
 
     for batch in load_claims_batches(path = args.dataset_path, start = args.idx_start, batch_size = args.batch_size, limit=args.limit):
 
@@ -84,16 +88,18 @@ def main():
             examples=batch, 
             system_prompt=args.system, 
             user_template=args.user)
+        
+        for i in range(args.repetition):
+            # run inference 
+            texts, parsed, per_item = run_inference(llm, conversations=conversations, sampling=sampling, json_format=OutputSarc)
 
-        # run inference 
-        texts, parsed, per_item = run_inference(llm, conversations=conversations, sampling=sampling, json_format=OutputSarc)
 
-        rows = [
-        {'id': ex['id'], 'input_text': ex['text'], 'output_text': t, 'valid_json': p is not None, 'parsed': p} for ex, t, p in zip(examples, texts, parsed)
-        ]
+            rows = [
+            {'id': ex['id'], 'claim': ex['text'], 'model': model_name, 'repetition': i, 'label': p['label'], 'explanation': p['explanation'], 'confidence': p['confidence'], 'valid_json': p is not None} for ex, p in zip(batch, parsed)
+            ]
 
-        write_jsonl(rows, jsonl_path)
-        write_csv(rows, csv_path, ['id', 'input_text', 'output_text', 'valid_json'])
+            # write_jsonl(rows, jsonl_path)
+            write_csv(rows, csv_path, ['id', 'claim', 'model', 'repetition', 'label', 'explanation', 'confidence', 'valid_json'])
 
     print(f'Wrote {len(rows)} rows to {outdir}')
     print(f'Avg latency/item approx. {per_item:3f}s')
