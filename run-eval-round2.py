@@ -1,7 +1,7 @@
 from dotenv import load_dotenv
 import argparse, pathlib
 from utils.data import load_claims_text, load_claims_batches
-from utils.prompts import build_conversations, SYSTEM_JSON_GUIDED_R2, USER_R2
+from utils.prompts import build_conversations_round2, SYSTEM_JSON_GUIDED_R2, USER_R2
 from utils.models import load_yaml, init_llm, init_sampling_params, ensure_local_model
 from utils.runner import run_inference
 from utils.io import write_csv, write_jsonl
@@ -18,7 +18,7 @@ def main():
                     help = 'Short name of model from configs/models.yaml')
     ap.add_argument('--dataset_path', 
                     help='Path to dataset', 
-                    default='data/sarc/train_text.txt')
+                    default='data/sarc/dummy.csv')
     ap.add_argument('--decoding_cfg', 
                     help='Path to YAML file with sampling params and guided decoding toggle',
                     default='configs/decoding.yaml')
@@ -41,7 +41,7 @@ def main():
     ap.add_argument('-idx_start',
                     help='Idx of row to start from in dataset',
                     type=int,
-                    default=None)
+                    default=0)
 
     args = ap.parse_args()
 
@@ -65,7 +65,7 @@ def main():
 
 
     # # init model and sampling 
-    llm = init_llm(model_cfg=model_cfg)
+    #llm = init_llm(model_cfg=model_cfg)                                # TODO: uncomment
 
     #TODO: make it easier to switch to other task, SARCASM scheme hardcoded in init_sampling_params
     sampling = init_sampling_params(load_yaml(args.decoding_cfg))
@@ -77,26 +77,30 @@ def main():
     jsonl_path = outdir / f'{args.model_name}_round2.jsonl'
     csv_path = outdir / f'{args.model_name}:_round2.csv'
 
+    
+
     for batch in load_claims_batches(path = args.dataset_path, start = args.idx_start, batch_size = args.batch_size, limit=args.limit):
 
          # build the prompts
-        conversations = build_conversations(
+        conversations = build_conversations_round2(
             examples=batch, 
             system_prompt=args.system, 
             user_template=args.user)
+        print(conversations)
+        break
+        
+    #     # run inference 
+    #     texts, parsed, per_item = run_inference(llm, conversations=conversations, sampling=sampling, json_format=OutputSarcRound2)
 
-        # run inference 
-        texts, parsed, per_item = run_inference(llm, conversations=conversations, sampling=sampling, json_format=OutputSarcRound2)
+    #     rows = [
+    #     {'id': ex['id'], 'input_text': ex['text'], 'output_text': t, 'valid_json': p is not None, 'parsed': p} for ex, t, p in zip(examples, texts, parsed)
+    #     ]
 
-        rows = [
-        {'id': ex['id'], 'input_text': ex['text'], 'output_text': t, 'valid_json': p is not None, 'parsed': p} for ex, t, p in zip(examples, texts, parsed)
-        ]
+    #     write_jsonl(rows, jsonl_path)
+    #     write_csv(rows, csv_path, ['id', 'input_text', 'output_text', 'valid_json'])
 
-        write_jsonl(rows, jsonl_path)
-        write_csv(rows, csv_path, ['id', 'input_text', 'output_text', 'valid_json'])
-
-    print(f'Wrote {len(rows)} rows to {outdir}')
-    print(f'Avg latency/item approx. {per_item:3f}s')
+    # print(f'Wrote {len(rows)} rows to {outdir}')
+    # print(f'Avg latency/item approx. {per_item:3f}s')
 
 if __name__ == '__main__':
     main()

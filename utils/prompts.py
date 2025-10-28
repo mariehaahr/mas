@@ -55,9 +55,31 @@ def build_conversations(
     convs: List[List[Dict[str, str]]] = []
 
     for ex in examples:
+        
        convs.append([
           {'role': 'system', 'content': system_prompt},
           {'role': 'user', 'content': user_template.format(claim=ex['text'])},
        ])
+
+    return convs 
+
+def build_conversations_round2(
+    examples: List[Dict[str, str]],
+    system_prompt: str = SYSTEM_JSON_GUIDED_R2,             # this can be changed in run eval to R2
+    user_template: str = USER_R2) -> List[List[Dict[str, str]]]:
+
+    '''
+    Several conversations will be a list of lists containing a dict for each user.
+    This is for round 2, so we append label and explanation from the previous round. 
+    '''
+    convs: List[List[Dict[str, str]]] = []
+
+    for ex in examples:
+        print(ex.items())
+        
+        convs.append([
+          {'role': 'system', 'content': system_prompt},
+          {'role': 'user', 'content': user_template.format(claim=ex['claim'], other_label=ex['label'], other_explanation=ex['explanation'])},
+          ])
 
     return convs 
