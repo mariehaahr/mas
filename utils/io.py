@@ -10,7 +10,7 @@ def write_jsonl(records: List[Dict[str, Any]], path: pathlib.Path):
 
 def write_csv(records: List[Dict[str, Any]], path: pathlib.Path, fields):
     # checking if file needs header 
-    needs_header = (not pathlib.Path.exists()) or (path.stat().st_size == 0)
+    needs_header = (not path.exists()) or (path.stat().st_size == 0)
     with path.open('a', newline='', encoding='utf-8') as file:
         w = csv.DictWriter(file, fieldnames=fields)
         if needs_header:
