@@ -11,9 +11,8 @@ def run_inference(
     sampling: SamplingParams,
     json_format) -> Tuple[List[str], List[Dict[str, Any] | None], float]:
     
-    t0 = time.time()
+
     outs = llm.chat(messages=conversations, sampling_params=sampling)
-    latency = time.time() - t0 
 
     texts = [o.outputs[0].text if o.outputs else "" for o in outs]
     parsed = []
@@ -25,6 +24,4 @@ def run_inference(
         except(json.JSONDecodeError, ValidationError, KeyError, TypeError):
             parsed.append(None)
 
-
-    per_item = latency / max(1, len(conversations))
-    return texts, parsed, per_item
+    return texts, parsed

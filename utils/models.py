@@ -4,6 +4,7 @@ from vllm import LLM
 from vllm.sampling_params import SamplingParams, GuidedDecodingParams
 from .prompts import SARCASTIC_SCHEMA 
 import os, subprocess
+from typing import Dict, Any
 
 def load_yaml(path: str) -> dict:
     return yaml.safe_load(pathlib.Path(path).read_text())
@@ -15,7 +16,7 @@ def _sanitize_repo_id(repo_id: str) -> str:
 
 def ensure_local_model(
     repo_id: str
-) -> pathlib.Path:
+    ) -> pathlib.Path:
     """
     Ensure a model repo is present locally and return its path.
     - repo_id: e.g. "meta-llama/Meta-Llama-3-8B-Instruct"
@@ -23,7 +24,7 @@ def ensure_local_model(
     home_env = pathlib.Path.home()
     local_dir = pathlib.Path(f'{home_env}/.cache/huggingface/hub/{_sanitize_repo_id(repo_id)}')
     san = _sanitize_repo_id(repo_id)
-
+    print(san)
     # If the directory already exists and is non-empty, assume it’s usable
     if local_dir.exists() and any(local_dir.iterdir()):
         return local_dir
@@ -35,7 +36,7 @@ def ensure_local_model(
     ]
 
     subprocess.run(cmd, check=True)
-
+    print('hiiiii')
     return local_dir
 
 
@@ -48,14 +49,42 @@ def init_llm(model_cfg: dict) -> LLM:
     )
 
 
-def init_sampling_params(decoding_cfg: dict) -> SamplingParams:
+def init_sampling_params(decoding_cfg: dict, default: SamplingParams) -> SamplingParams:
+    """
+    Function to initialise sampling params. 
+    If default: then there are specified sampling params in HuggingFace repo, and we add the other attributes. 
+    Otherwise we initialise samplingparams with the specified sampling params. 
+    """
     guided = GuidedDecodingParams(json = SARCASTIC_SCHEMA) if decoding_cfg['use_guided_json'] else None
-    
-    return SamplingParams(
-        max_tokens=decoding_cfg.get('max_tokens', 100),
-        temperature = decoding_cfg.get('temperature', 1.0),
-        top_p = decoding_cfg.get('top_p', 1.0),
-        guided_decoding = guided
-        )
+
+    if default is not None:
+        default.guided_decoding = guided
+        for k in decoding_cfg.keys():
+            if hasattr(default, k):
+                setattr(default, k, decoding_cfg[k])
+        return default
+    else:
+        allowed_keys = {
+            "temperature",
+            "top_p",
+            "top_k",
+            "min_p",
+            "repetition_penalty",
+            "presence_penalty",
+            "frequency_penalty",
+            "n",
+            "seed",
+            "stop",
+            "stop_token_ids",
+        }
+        kwargs: Dict[str, Any] = {}
+        for k in allowed_keys:
+            if k in decoding_cfg and decoding_cfg[k] is not None:
+                kwargs[k] = decoding_cfg[k]
+
+        return SamplingParams(
+            guided_decoding = guided,
+            **kwargs
+            )
 
 

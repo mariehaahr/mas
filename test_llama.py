@@ -2,7 +2,7 @@ from vllm import LLM, SamplingParams
 import torch, vllm
 import time 
 from dotenv import load_dotenv
-
+from utils.models import load_yaml
 # access token from hf
 load_dotenv("/home/mhpe/.env")
 
@@ -12,10 +12,27 @@ def main():
     # meta-llama/Llama-3.3-70B-Instruct
     # unsloth/Llama-3.3-70B-Instruct-bnb-4bit"
     # LLM(model="nvidia/Llama-3.3-70B-Instruct-FP8", quantization="fp8")
-    llm = LLM(model="nvidia/Llama-3.3-70B-Instruct-FP8", quantization="fp8")
+    llm = LLM(model="unsloth/mistral-7b-instruct-v0.3-bnb-4bit", quantization="bitsandbytes")
+    
+    profiles_root = load_yaml('configs/models.yaml')
+    profiles = profiles_root.get('profiles', {})
 
-    # default parameters from the documentation
-    params = SamplingParams(temperature=1.0, top_p=1.0, max_tokens=40) 
+    print(profiles_root['profiles']['mistral-0.3-7b'])
+    # Returns the effective defaults (merged from the model’s generation_config.json)
+    sp = llm.get_default_sampling_params()
+
+    print("Temperature:", sp.temperature)
+    print("Top-p:", sp.top_p)
+    print("Max tokens:", sp.max_tokens)
+
+    try:
+        print(sp.model_dump())   # pydantic v2 style
+    except Exception:
+        print(vars(sp))
+
+
+    # default parameters from the documentation 
+    params = SamplingParams(max_tokens=40) 
 
 
     prompt = """
@@ -30,8 +47,6 @@ def main():
 
     # Query
     outputs = llm.generate(prompt, params) # true label is sarcastic for this example
-
-
 
     for output in outputs:
         print('This is output:')

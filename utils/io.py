@@ -7,6 +7,12 @@ def write_jsonl(records: List[Dict[str, Any]], path: pathlib.Path):
         for r in records:
             file.write(json.dumps(r, ensure_ascii=False) + '\n')
 
+def _ensure_oneline(s: str) -> str:
+    if s is None:
+        return ""
+
+    return json.dumps(s, ensure_ascii=False)
+
 
 def write_csv(records: List[Dict[str, Any]], path: pathlib.Path, fields):
     # checking if file needs header 
@@ -16,5 +22,6 @@ def write_csv(records: List[Dict[str, Any]], path: pathlib.Path, fields):
         if needs_header:
             w.writeheader()
         for r in records:
+            r['raw_text'] = _ensure_oneline(r['raw_text'])
             w.writerow({k: r.get(k) for k in fields})
             

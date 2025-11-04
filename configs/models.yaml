@@ -1,19 +1,40 @@
+sampling_presets:
+  conservative: &s_conservative
+    temperature: 0.2
+    top_p: 0.9
+  creative: &s_creative
+    temperature: 0.7
+    top_p: 0.95
+
 profiles:
   llama-3.1-8b:
     model: unsloth/Meta-Llama-3.1-8B-Instruct-bnb-4bit
     quantization: bitsandbytes
+    has_default_sampling_params: True
   llama-3.2-1b:
     model: unsloth/Llama-3.2-1B-Instruct-unsloth-bnb-4bit
     quantization: bitsandbytes
+    has_default_sampling_params: True
+  llama-3.2-3b:
+    model: unsloth/Llama-3.2-3B-Instruct-bnb-4bit
+    quantization: bitsandbytes
+    has_default_sampling_params: True
   qwen-2.5-7b:
     model: unsloth/Qwen2.5-7B-Instruct-bnb-4bit
     quantization: bitsandbytes
+    has_default_sampling_params: True
   qwen-2.5-1.5b:
     model: unsloth/Qwen2.5-1.5B-Instruct-unsloth-bnb-4bit
     quantization: bitsandbytes
+    has_default_sampling_params: True
   mistral-0.3-7b:
     model: unsloth/mistral-7b-instruct-v0.3-bnb-4bit
     quantization: bitsandbytes
+    has_default_sampling_params: False
+    sampling: *s_conservative
   mistral-0.2-7b:
     model: unsloth/Mistral-7B-Instruct-v0.2-bnb-4bit
     quantization: bitsandbytes
+    has_default_sampling_params: False
+    sampling: *s_conservative
+

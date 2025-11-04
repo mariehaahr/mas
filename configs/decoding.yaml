@@ -1,5 +1,3 @@
 # Sampling & (optional) JSON-guided decoding
-max_tokens: 100
-temperature: 0.0
-top_p: 1.0
+max_tokens: 254
 use_guided_json: true   # set to false to disable GuidedDecodingParams
