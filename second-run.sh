@@ -1,5 +1,5 @@
 #!/bin/bash
-#SBATCH --job-name=first-test
+#SBATCH --job-name=third-test-2ndR
 #SBATCH --partition=acltr
 #SBATCH --gres=gpu:1
 #SBATCH --cpus-per-task=4
@@ -20,9 +20,10 @@ set -euo pipefail
 # export TRANSFORMERS_OFFLINE=1
 
 uv sync 
-# uv run run-eval.py --model_name llama-3.1-8b -limit 20 --outdir results/ # virker ikke 
-# uv run run-eval.py --model_name llama-3.2-1b -limit 20 --outdir results/
-#uv run run-eval.py --model_name qwen-2.5-7b -limit 50_000 --outdir results/
-# uv run run-eval.py --model_name qwen-2.5-1.5b -limit 20 --outdir results/
-uv run run-eval-round2.py --model_name mistral-0.3-7b -limit 10 --outdir results/
-# uv run src/structured-output.py
+# uv run run-eval-round2.py --model_name llama-3.1-8b -limit 20 --outdir results/ # virker ikke 
+# uv run run-eval-round2.py --model_name llama-3.2-1b -limit 20 --outdir results/
+#uv run run-eval-round2.py --model_name qwen-2.5-7b -limit 50_000 --outdir results/
+uv run run-eval-round2.py --model_name qwen-2.5-1.5b -limit 10 --outdir results/ --repetition 30
+# uv run run-eval-round2.py --model_name mistral-0.3-7b -limit 10 --outdir results/
+# uv run run-eval-round2.py --model_name mistral-0.2-7b -limit 10 --outdir results/
+
