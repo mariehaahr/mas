@@ -45,6 +45,31 @@ mask_has_banned = sarcasm_pr["text"].str.contains(pattern, na=False)
 
 sarcasm_clean = sarcasm_pr[~mask_has_banned].copy()
 flagged = sarcasm_pr[mask_has_banned].copy()
+
+print('Label distribution original')
+print(sarcasm['label'].value_counts())
+
+print('Label distribution processed')
+print(sarcasm_clean['label'].value_counts())
+
+print('Size of processed dataset')
 print(sarcasm_clean.shape)
-sarcasm_clean.to_csv('data/sarc/sarcasm2.csv', index=False)
-flagged.to_csv('data/sarc/flagged2.csv', index=False)
+
+# taking a sample, with balanced labels 
+SAMPLE_SIZE = 50_000
+
+balanced_df = (
+    sarcasm_clean.groupby('label', group_keys=False)
+      .apply(lambda x: x.sample(int(SAMPLE_SIZE/2), random_state=42))
+)
+# print(balanced_df.shape)
+# print(balanced_df['label'].value_counts())
+# print(balanced_df.head(10))
+# print(balanced_df.head(-10))
+# print(sarcasm_clean.head(10))
+
+# sarcasm_clean.to_csv('data/sarc/sarcasm2.csv', index=False)
+# flagged.to_csv('data/sarc/flagged2.csv', index=False)
+
+
+balanced_df.to_csv('data/sarc/sarcasm50k.csv')
