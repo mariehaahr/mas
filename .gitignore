@@ -13,4 +13,4 @@ uv.lock
 
 #folder
 logs/
-pyproject.toml
+pyproject.tomlresults/*.csv

@@ -17,7 +17,7 @@ def _ensure_oneline(s: str) -> str:
 def write_csv(records: List[Dict[str, Any]], path: pathlib.Path, fields):
     # checking if file needs header 
     needs_header = (not path.exists()) or (path.stat().st_size == 0)
-    with path.open('a', newline='', encoding='utf-8') as file:
+    with path.open('a', newline='', encoding='utf-8', errors='replace') as file:
         w = csv.DictWriter(file, fieldnames=fields)
         if needs_header:
             w.writeheader()

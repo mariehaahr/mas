@@ -1,6 +1,6 @@
 import pandas as pd 
 from pathlib import Path
-
+import re
 
 txt_path = Path('data/sarc/raw/train_text.txt')
 with txt_path.open(encoding="utf-8") as f:
@@ -19,4 +19,32 @@ sarcasm['n_words'] = [len(x.split()) for x in sarcasm['text'].tolist()]
 # filter out too short and too long examples
 sarcasm_pr = sarcasm[(sarcasm['n_words'] >= 6) & (sarcasm['n_words'] < 500)]
 
-# sarcasm_pr.to_csv('data/sarc/sarcasm.csv', index=False)
+# remove examples that contain mentions of Israel, israeli, muslim, hillary, racism, racists, trump, russian, russia, slavery, jesus, gay, lesbian, homosexuality, communist, communism, terrorism, palestine, palestianians, rape, conservative, democrat, republican, antifa  
+
+BASE_TERMS = [
+    r"ukrain\w*", r"russi\w*", r"putin", r"zelensky\w*",
+    r"iran\w*", r"iraq\w*", r"syria\w*", r"afghan\w*",
+    r"gaza", r"west\s*bank", r"hamas", r"hezbollah", r"isis", r"taliban", r"idf",
+    r"biden", r"obama", r"clinton", r"bush", r"reagan", r"sanders", r"aoc", r"desantis", r"pence", r"hillary",
+    r"democrat\w*", r"republican\w*", r"liberal\w*", r"progressive\w*", r"conservativ\w*",
+    r"libertarian\w*", r"socialist\w*", r"marxist\w*", r"fascist\w*", r"nazi\w*", r"alt-?right", r"woke",
+    r"fascism", r"communism", r"socialism", r"liberalism", r"conservatism", r"antifa",
+    r"islam\w*", r"muslim\w*", r"christian\w*", r"catholic\w*", r"jewish", r"judais\w*", r"zionis\w", r"israel", r"palestine", r"palestinians",
+    r"hindu\w*", r"sikh\w*", r"buddhist\w*", r"buddhis\w*", r"atheis\w*",
+    r"trans(?:gender)?\w*", 
+    r"non-?binary", r"lgbt\w*", r"queer", r"bisexual\w*", r"pansexual\w*", r"pronoun\w*",
+    r"immigra\w*", r"migrant\w*", r"refugee\w*", r"abortion", r"pro-?life", r"pro-?choice", r"suicide"
+    r"gun\w*", r"firearm\w*", r"nra", r"racist\w",
+    r"covid\w*", r"coronavirus", r"pandemic", r"lockdown\w*", r"vaccine\w*", r"anti-?vax\w*",
+    r"hitler", r"stalin", r"genocide\w*", r"holocaust", r"apartheid",
+    r"climate\s*change", r"global\s*warming", r"feminis\w*", r"#metoo",
+]
+
+pattern = re.compile(r"\b(?:%s)\b" % "|".join(BASE_TERMS), flags=re.IGNORECASE)
+mask_has_banned = sarcasm_pr["text"].str.contains(pattern, na=False)
+
+sarcasm_clean = sarcasm_pr[~mask_has_banned].copy()
+flagged = sarcasm_pr[mask_has_banned].copy()
+print(sarcasm_clean.shape)
+sarcasm_clean.to_csv('data/sarc/sarcasm2.csv', index=False)
+flagged.to_csv('data/sarc/flagged2.csv', index=False)
