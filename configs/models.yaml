@@ -1,10 +1,7 @@
 sampling_presets:
-  conservative: &s_conservative
+  mistral: &mistral
     temperature: 0.2
     top_p: 0.9
-  creative: &s_creative
-    temperature: 0.7
-    top_p: 0.95
 
 profiles:
   llama-3.1-8b:
@@ -31,10 +28,10 @@ profiles:
     model: unsloth/mistral-7b-instruct-v0.3-bnb-4bit
     quantization: bitsandbytes
     has_default_sampling_params: False
-    sampling: *s_conservative
+    sampling: *mistral
   mistral-0.2-7b:
     model: unsloth/Mistral-7B-Instruct-v0.2-bnb-4bit
     quantization: bitsandbytes
     has_default_sampling_params: False
-    sampling: *s_conservative
+    sampling: *mistral
 
