@@ -1,10 +1,10 @@
 #!/bin/bash
-#SBATCH --job-name=first-llama-3.2-1b-extra
+#SBATCH --job-name=first-qwen-2.5-1.5b
 #SBATCH --partition=acltr
 #SBATCH --gres=gpu:1
 #SBATCH --cpus-per-task=4
 #SBATCH --mem=32G
-#SBATCH --time=7:00:00
+#SBATCH --time=14:00:00
 #SBATCH --output=logs/%x.%j.out
 #SBATCH --error=logs/%x.%j.err
 #SBATCH --constraint="gpu_h100|gpu_a100_80gb"
@@ -22,8 +22,8 @@ uv sync
 
 # uv run run-eval.py --model_name qwen-2.5-7b --repetition 10 --outdir results/ --dataset_path data/sarc/sarcasm50k.csv
 
-## TIL MARIE # husk at ændre  job-name øverst også, evt. også tid for at være på den sikre side  
-# uv run run-eval.py --model_name qwen-2.5-1.5b --repetition 10 --outdir results_extra/ --dataset_path data/sarc/sarcasm2-minus-50k.csv
+## TIL MARIE
+uv run run-eval.py --model_name qwen-2.5-1.5b --repetition 10 --outdir results_extra/ --dataset_path data/sarc/sarcasm2-minus-50k.csv
 
 # uv run run-eval.py --model_name mistral-0.3-7b -limit 1 --outdir results/ --repetition 10
 # uv run src/structured-output.py
