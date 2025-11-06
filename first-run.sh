@@ -1,10 +1,10 @@
 #!/bin/bash
-#SBATCH --job-name=first-llama-3.2-1b
+#SBATCH --job-name=first-qwen-2.5-7b
 #SBATCH --partition=acltr
 #SBATCH --gres=gpu:1
 #SBATCH --cpus-per-task=4
 #SBATCH --mem=32G
-#SBATCH --time=00:10:00
+#SBATCH --time=30:00:00
 #SBATCH --output=logs/%x.%j.out
 #SBATCH --error=logs/%x.%j.err
 #SBATCH --constraint="gpu_h100|gpu_a100_80gb"
