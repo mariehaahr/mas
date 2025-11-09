@@ -1,7 +1,10 @@
+# models.yaml
+# File specifying specific model params
 sampling_presets:
-  mistral: &mistral
-    temperature: 0.2
-    top_p: 0.9
+  mistral2: &mistral2
+    temperature: 0.6
+  mistral3: &mistral3
+    temperature: 0.5
 
 profiles:
   llama-3.1-8b:
@@ -28,10 +31,10 @@ profiles:
     model: unsloth/mistral-7b-instruct-v0.3-bnb-4bit
     quantization: bitsandbytes
     has_default_sampling_params: False
-    sampling: *mistral
+    sampling: *mistral3
   mistral-0.2-7b:
     model: unsloth/Mistral-7B-Instruct-v0.2-bnb-4bit
     quantization: bitsandbytes
     has_default_sampling_params: False
-    sampling: *mistral
+    sampling: *mistral2
 

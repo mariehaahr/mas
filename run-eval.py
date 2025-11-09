@@ -45,7 +45,7 @@ def main(args):
     else:
         # params we have specified
         decoding_cfg = {**decoding_cfg, **model_cfg['sampling']}
-        sampling = init_sampling_params(decoding_cfg)
+        sampling = init_sampling_params(decoding_cfg, default = None)
     
     # print params to output
     print('###### SAMPLING PARAMS ######')
@@ -95,7 +95,7 @@ if __name__ == '__main__':
                         help = 'Short name of model from configs/models.yaml')
         ap.add_argument('--dataset_path', 
                         help='Path to dataset', 
-                        default='data/sarc/sarcasm.csv')
+                        default='data/sarc/sarcasm2.csv')
         ap.add_argument('--repetition',
                         help='Number of times a model is presented a specific claim.',
                         type=int,

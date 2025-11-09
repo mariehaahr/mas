@@ -57,13 +57,14 @@ def init_sampling_params(decoding_cfg: dict, default: SamplingParams) -> Samplin
     """
     guided = GuidedDecodingParams(json = SARCASTIC_SCHEMA) if decoding_cfg['use_guided_json'] else None
 
+    # If there are default sampling params in huggingface, use all defaults and only write over default params that are specified in decoding_cfg. 
     if default is not None:
         default.guided_decoding = guided
         for k in decoding_cfg.keys():
             if hasattr(default, k):
                 setattr(default, k, decoding_cfg[k])
         return default
-    else:
+    else: # no default params
         allowed_keys = {
             "temperature",
             "top_p",
@@ -73,14 +74,15 @@ def init_sampling_params(decoding_cfg: dict, default: SamplingParams) -> Samplin
             "presence_penalty",
             "frequency_penalty",
             "n",
+            "max_tokens",
             "seed",
             "stop",
             "stop_token_ids",
         }
         kwargs: Dict[str, Any] = {}
         for k in allowed_keys:
-            if k in decoding_cfg and decoding_cfg[k] is not None:
-                kwargs[k] = decoding_cfg[k]
+            if k in decoding_cfg and decoding_cfg[k] is not None: # we have this check because there are other keys like quantization in the dict. 
+                kwargs[k] = decoding_cfg[k] # Params specified in decoding (like temperature)
 
         return SamplingParams(
             guided_decoding = guided,

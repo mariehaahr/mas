@@ -1,5 +1,5 @@
 #!/bin/bash
-#SBATCH --job-name=prep
+#SBATCH --job-name=summary-stats
 #SBATCH --partition=scavenge
 #SBATCH --cpus-per-task=1
 #SBATCH --time=00:20:00
@@ -10,4 +10,6 @@ echo "Host: $(hostname)"
 
 set -euo pipefail
 
+
 uv run src/analysis.py
+# uv run src/concat_results.py

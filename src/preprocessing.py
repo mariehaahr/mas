@@ -105,3 +105,28 @@ balanced_df = (
 # print('Number of datapoints in sarcasm for the two qween run')
 # print(sarcasm2_50k_rest.shape)
 # sarcasm2_50k_rest.to_csv('data/sarc/sarcasm2-minus-50k.csv', index = False)
+
+
+#################################################################################
+#
+#   Kode brugt til at filtrere det store result llama dataset ned til sarcasm2
+#                 Slettes nok senere            
+#                                                                                    
+#                                                                                   
+#################################################################################
+
+# llama_res = pd.read_csv('results/first-llama-3.2-1b-large.csv')
+# sarcasm2 = pd.read_csv('data/sarc/sarcasm2.csv')
+
+# # 2 things to sort this dataset on: 
+# #   (1) No results from IDs that are not in sarcasm2. 
+# #   (2) Only the first 10 repetitions. 
+
+# # Criteria 1 
+# llama_res_filtered = llama_res[llama_res['id'].isin(sarcasm2['id'])]
+
+# # Critera 2 
+# llama_res_filtered = llama_res_filtered[llama_res_filtered['repetition'] < 10].copy()
+
+# # Save results 
+# llama_res_filtered.to_csv('results/first-llama-3.2-1b.csv', index=False)

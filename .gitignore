@@ -16,3 +16,4 @@ logs/
 pyproject.tomlresults/*.csv
 results/
 results_extra/
+results_small/
