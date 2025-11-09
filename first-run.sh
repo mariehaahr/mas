@@ -1,5 +1,5 @@
 #!/bin/bash
-#SBATCH --job-name=first-mistral-0.3-7b
+#SBATCH --job-name=first-mistral-0.2-7b
 #SBATCH --partition=acltr
 #SBATCH --gres=gpu:1
 #SBATCH --cpus-per-task=4
