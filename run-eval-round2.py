@@ -45,7 +45,7 @@ def main(args):
     else:
         # params we have specified
         decoding_cfg = {**decoding_cfg, **model_cfg['sampling']}
-        sampling = init_sampling_params(decoding_cfg, default = llm.get_default_sampling_params()) # var uden default før
+        sampling = init_sampling_params(decoding_cfg, default = None) # var uden default før
     
     # print params to output
     print('###### SAMPLING PARAMS ######')
@@ -61,32 +61,39 @@ def main(args):
 
     no_rows = 0
 
+    # first load in the sender-reciever data for model 
+
+    # adjust load claims batches to only take the claims that are present in sender-receiver df
     for batch in load_claims_batches(path = args.dataset_path, start = args.idx_start, batch_size = args.batch_size, limit=args.limit):
 
         # build the prompts
-        conversations = build_conversations_round2(
-            examples=batch, 
-            system_prompt=args.system, 
-            user_template=args.user)
+
+        print(batch)
+        break 
+    #     # TODO: Change build conversations to take label from sender
+    #     conversations = build_conversations_round2(
+    #         examples=batch, 
+    #         system_prompt=args.system, 
+    #         user_template=args.user)
         
-        for i in range(args.repetition):
-            # run inference 
-            texts, parsed = run_inference(llm, conversations=conversations, sampling=sampling, json_format=OutputSarcRound2)
-            valid_json = []
+    #     for i in range(args.repetition):
+    #         # run inference 
+    #         texts, parsed = run_inference(llm, conversations=conversations, sampling=sampling, json_format=OutputSarcRound2)
+    #         valid_json = []
 
-            rows = []
-            for ex, t, p in zip(batch, texts, parsed):
-                valid_json = False
-                if p is not None:
-                    valid_json = True
-                    rows.append({'id': ex['id'], 'from_model': ex['model'], 'to_model': model_name, 'repetition': i, 'label': p['label'], 'confidence': p['confidence'], 'valid_json': valid_json, 'raw_text': t})
-                else:
-                    rrows.append({'id': ex['id'], 'from_model': ex['model'], 'to_model': model_name, 'repetition': i, 'label': None, 'confidence': None, 'valid_json': valid_json, 'raw_text': t})
+    #         rows = []
+    #         for ex, t, p in zip(batch, texts, parsed):
+    #             valid_json = False
+    #             if p is not None:
+    #                 valid_json = True
+    #                 rows.append({'id': ex['id'], 'from_model': ex['model'], 'to_model': model_name, 'repetition': i, 'label': p['label'], 'confidence': p['confidence'], 'valid_json': valid_json, 'raw_text': t})
+    #             else:
+    #                 rrows.append({'id': ex['id'], 'from_model': ex['model'], 'to_model': model_name, 'repetition': i, 'label': None, 'confidence': None, 'valid_json': valid_json, 'raw_text': t})
 
-            no_rows += len(rows)
-            write_csv(rows, csv_path, ['id', 'from_model', 'to_model', 'repetition', 'label', 'confidence', 'valid_json', 'raw_text'])
+    #         no_rows += len(rows)
+    #         write_csv(rows, csv_path, ['id', 'from_model', 'to_model', 'repetition', 'label', 'confidence', 'valid_json', 'raw_text'])
 
-    print(f'Wrote {no_rows} rows to {outdir}')
+    # print(f'Wrote {no_rows} rows to {outdir}')
 
 if __name__ == '__main__':
     t0 = time.perf_counter()

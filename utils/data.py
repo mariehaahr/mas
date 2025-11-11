@@ -20,7 +20,7 @@ def load_claims_batches(
                 path: str, 
                 start: int=0,
                 batch_size: int=256,
-                limit: Optional[int] = None ) -> Iterator[List[Dict[int, str]]]:
+                limit: Optional[int] = None ) -> Iterator[List[Dict[str, str]]]:
     
     data = pd.read_csv(path)
 

@@ -5,11 +5,14 @@ import pandas as pd
 
 # first = pd.read_csv('results/first-llama-3.2-1b-old.csv')
 # first = pd.read_csv('results/first-qwen-2.5-7b-old.csv')
-first = pd.read_csv('results/first-qwen-2.5-7b-old.csv')
+# first = pd.read_csv('results/first-qwen-2.5-7b-old.csv')
+first = pd.read_csv('/home/rp-fril-mhpe/first-qwen-2.5-1.5b.csv')
+
 
 # second = pd.read_csv('results_extra/first-llama-3.2-1b.csv')
 # second = pd.read_csv('results_extra/first-qwen-2.5-7b.csv')
-second = pd.read_csv('results_extra/first-qwen-2.5-7b.csv')
+# second = pd.read_csv('results_extra/first-qwen-2.5-7b.csv')
+second = pd.read_csv('/home/rp-fril-mhpe/first-qwen-2.5-1.5b-large.csv')
 
 
 # Make sure they have the same columns 
@@ -22,7 +25,7 @@ else:
     combined = pd.concat([first, second], ignore_index=True)
 
     combined = combined.sort_values(by='id').reset_index(drop=True)
-    combined.to_csv('results/first-qwen-2.5-7b.csv', index=False)
+    combined.to_csv('results/first-qwen-2.5-1.5b.csv', index=False)
 
 
 print(combined.shape)

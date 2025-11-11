@@ -47,7 +47,7 @@ USER_R2 = ( "Task: Is this claim sarcastic or literal?\n"
 def build_conversations(
     examples: List[Dict[str, str]],
     system_prompt: str = SYSTEM_JSON_GUIDED_R1,             # this can be changed in run eval to R2
-    user_template: str = USER_R1) -> List[List[Dict[str, str]]]:
+    user_template: str = USER_R1) -> List[List[Dict[int, str]]]:
 
     '''
     Several conversations will be a list of lists containing a dict for each user. 
@@ -64,7 +64,7 @@ def build_conversations(
     return convs 
 
 def build_conversations_round2(
-    examples: List[Dict[str, str]],
+    examples: List[Dict[int, str]],
     system_prompt: str = SYSTEM_JSON_GUIDED_R2,             # this can be changed in run eval to R2
     user_template: str = USER_R2) -> List[List[Dict[str, str]]]:
 
