@@ -61,9 +61,7 @@ def main(args):
 
     no_rows = 0
 
-    # first load in the sender-reciever data for model 
 
-    # adjust load claims batches to only take the claims that are present in sender-receiver df
     for batch in load_claims_batches(path = args.dataset_path, start = args.idx_start, batch_size = args.batch_size, limit=args.limit):
 
         # build the prompts
