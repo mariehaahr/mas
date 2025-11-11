@@ -7,10 +7,6 @@ sampling_presets:
     temperature: 0.5
 
 profiles:
-  llama-3.1-8b:
-    model: unsloth/Meta-Llama-3.1-8B-Instruct-bnb-4bit
-    quantization: bitsandbytes
-    has_default_sampling_params: True
   llama-3.2-1b:
     model: unsloth/Llama-3.2-1B-Instruct-unsloth-bnb-4bit
     quantization: bitsandbytes
