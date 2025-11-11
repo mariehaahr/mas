@@ -38,7 +38,7 @@ USER_R1 = ( "Task: Is this claim sarcastic or literal?\n"
 
 USER_R2 = ( "Task: Is this claim sarcastic or literal?\n"
             'Claim: "{claim}"\n'
-            "A peer of yours think the claim is {other_label}, with the following explanation: '{other_explanation}' \n"
+            "A peer of yours think the claim is {label_sender}, with the following explanation: '{explanation_sender}' \n"
             "Output format:\n"
             "Label: sarcastic/literal\n"
             "Confidence (0-100): How confident are you about your answer?"
@@ -78,7 +78,7 @@ def build_conversations_round2(
         
         convs.append([
           {'role': 'system', 'content': system_prompt},
-          {'role': 'user', 'content': user_template.format(claim=ex['claim'], other_label=ex['label'], other_explanation=ex['explanation'])},
+          {'role': 'user', 'content': user_template.format(claim=ex['claim'], label_sender=ex['label_sender'], explanation_sender=ex['explanation_sender'])},
           ])
 
     return convs 

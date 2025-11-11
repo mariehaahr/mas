@@ -41,8 +41,6 @@ dfs = []
 # loop for all senders: 
 for sender in senders: 
     sender_name = sender.replace("first-", "")
-    if sender_name == "mistral-0.2-7b":
-        continue # skip mistral for now                   TODO: remove
     print(f"Processing sender: {sender_name}") # for the log
 
     sender_lookup = lookup[lookup["model"] == sender_name].copy()
@@ -71,15 +69,13 @@ for sender in senders:
 
     # merge explanations onto
     df = merged_disagree.merge(
-        sender_results[["id", "explanation"]],
+        sender_results[["id", "label", "explanation"]],
         on="id",
         how="left"
     )
-
-    # give the correct names to the columns:                            Not necessary, since we already have these columns TODO: remove
-    # df["sender_model"] = sender_name
-    # df["receiver_model"] = receiver_name
-
+    # rename columns
+    df = df.rename(columns={"label":"label_sender", "explanation": "explanation_sender"})
+    
     # append
     dfs.append(df)
     

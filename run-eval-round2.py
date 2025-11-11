@@ -72,6 +72,7 @@ def main(args):
             examples=batch, 
             system_prompt=args.system, 
             user_template=args.user)
+        print(conversations)
 
         break   
     #     for i in range(args.repetition):
@@ -102,10 +103,6 @@ if __name__ == '__main__':
         ap.add_argument('--dataset_path', 
                         help='Path to dataset', 
                         default='results_small/first-llama-3.2-3b.csv')
-        ap.add_argument('--repetition',
-                        help='Number of times a model is presented a specific claim.',
-                        type=int,
-                        default=1)
         ap.add_argument('--decoding_cfg', 
                         help='Path to YAML file with sampling params and guided decoding toggle',
                         default='configs/decoding.yaml')
