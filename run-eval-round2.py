@@ -85,12 +85,12 @@ def main(args):
     #             valid_json = False
     #             if p is not None:
     #                 valid_json = True
-    #                 rows.append({'id': ex['id'], 'from_model': ex['model'], 'to_model': model_name, 'repetition': i, 'label': p['label'], 'confidence': p['confidence'], 'valid_json': valid_json, 'raw_text': t})
+    #                 rows.append({'id': ex['id'], 'model_sender': ex['model_sender'], 'model_receiver': model_name, 'label': p['label'], 'confidence': p['confidence'], 'valid_json': valid_json, 'raw_text': t})
     #             else:
-    #                 rrows.append({'id': ex['id'], 'from_model': ex['model'], 'to_model': model_name, 'repetition': i, 'label': None, 'confidence': None, 'valid_json': valid_json, 'raw_text': t})
+    #                 rrows.append({'id': ex['id'], 'model_sender': ex['model_sender'], 'model_receiver': model_name, 'label': None, 'confidence': None, 'valid_json': valid_json, 'raw_text': t})
 
     #         no_rows += len(rows)
-    #         write_csv(rows, csv_path, ['id', 'from_model', 'to_model', 'repetition', 'label', 'confidence', 'valid_json', 'raw_text'])
+    #         write_csv(rows, csv_path, ['id', 'model_sender', 'model_receiver', 'label', 'confidence', 'valid_json', 'raw_text'])
 
     # print(f'Wrote {no_rows} rows to {outdir}')
 
