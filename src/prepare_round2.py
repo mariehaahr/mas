@@ -76,9 +76,9 @@ for sender in senders:
         how="left"
     )
 
-    # give the correct names to the columns:
-    df["sender_model"] = sender_name
-    df["receiver_model"] = receiver_name
+    # give the correct names to the columns:                            Not necessary, since we already have these columns TODO: remove
+    # df["sender_model"] = sender_name
+    # df["receiver_model"] = receiver_name
 
     # append
     dfs.append(df)
