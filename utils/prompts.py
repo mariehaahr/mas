@@ -75,7 +75,6 @@ def build_conversations_round2(
     convs: List[List[Dict[str, str]]] = []
 
     for ex in examples:
-        print(ex.items())
         
         convs.append([
           {'role': 'system', 'content': system_prompt},

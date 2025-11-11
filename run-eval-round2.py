@@ -34,29 +34,29 @@ def main(args):
 
 
     # init model and sampling 
-    llm = init_llm(model_cfg=model_cfg)                      
+    # llm = init_llm(model_cfg=model_cfg)                      
     
-    # get sampling params
-    decoding_cfg = load_yaml(args.decoding_cfg)
+    # # get sampling params
+    # decoding_cfg = load_yaml(args.decoding_cfg)
 
-    if model_cfg['has_default_sampling_params']:        
-        # if sampling params specified in huggingface repo
-        sampling = init_sampling_params(decoding_cfg, default = llm.get_default_sampling_params())
-    else:
-        # params we have specified
-        decoding_cfg = {**decoding_cfg, **model_cfg['sampling']}
-        sampling = init_sampling_params(decoding_cfg, default = None) # var uden default før
+    # if model_cfg['has_default_sampling_params']:        
+    #     # if sampling params specified in huggingface repo
+    #     sampling = init_sampling_params(decoding_cfg, default = llm.get_default_sampling_params())
+    # else:
+    #     # params we have specified
+    #     decoding_cfg = {**decoding_cfg, **model_cfg['sampling']}
+    #     sampling = init_sampling_params(decoding_cfg, default = None) # var uden default før
     
-    # print params to output
-    print('###### SAMPLING PARAMS ######')
-    print(sampling)
+    # # print params to output
+    # print('###### SAMPLING PARAMS ######')
+    # print(sampling)
 
 
     # write results 
     outdir = pathlib.Path(args.outdir)
     outdir.mkdir(parents = True, exist_ok = True)
     
-    jsonl_path = outdir / f'{args.model_name}_round2.jsonl'
+    # jsonl_path = outdir / f'{args.model_name}_round2.jsonl'
     csv_path = outdir / f'{args.model_name}_round2.csv'
 
     no_rows = 0
@@ -67,15 +67,15 @@ def main(args):
     for batch in load_claims_batches(path = args.dataset_path, start = args.idx_start, batch_size = args.batch_size, limit=args.limit):
 
         # build the prompts
-
         print(batch)
-        break 
-    #     # TODO: Change build conversations to take label from sender
-    #     conversations = build_conversations_round2(
-    #         examples=batch, 
-    #         system_prompt=args.system, 
-    #         user_template=args.user)
         
+        # TODO: Change build conversations to take label from sender
+        conversations = build_conversations_round2(
+            examples=batch, 
+            system_prompt=args.system, 
+            user_template=args.user)
+
+        break   
     #     for i in range(args.repetition):
     #         # run inference 
     #         texts, parsed = run_inference(llm, conversations=conversations, sampling=sampling, json_format=OutputSarcRound2)
