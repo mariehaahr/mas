@@ -65,7 +65,7 @@ def main(args):
     for batch in load_claims_batches(path = args.dataset_path, start = args.idx_start, batch_size = args.batch_size, limit=args.limit):
 
         # build the prompts
-        print(batch)
+        #print(batch)
         
         # TODO: Change build conversations to take label from sender
         conversations = build_conversations_round2(
