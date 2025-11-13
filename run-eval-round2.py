@@ -72,17 +72,11 @@ def main(args):
             examples=batch, 
             system_prompt=args.system, 
             user_template=args.user)
-        print(conversations)
    
         # run inference 
         texts, parsed = run_inference(llm, conversations=conversations, sampling=sampling, json_format=OutputSarcRound2)
         valid_json = []
-        print(batch.columns)
 
-        if 'label_sender' in batch.columns:
-            print('weeee')
-        else: 
-            print(":(")
         rows = []
         for ex, t, p in zip(batch, texts, parsed):
             valid_json = False
