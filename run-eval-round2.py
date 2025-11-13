@@ -72,7 +72,7 @@ def main(args):
             examples=batch, 
             system_prompt=args.system, 
             user_template=args.user)
-        # print(conversations)
+        print(conversations)
    
         # run inference 
         texts, parsed = run_inference(llm, conversations=conversations, sampling=sampling, json_format=OutputSarcRound2)
