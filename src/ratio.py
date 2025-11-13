@@ -31,7 +31,7 @@ def main():
     )
     aggregated['sarc_ratio'] = aggregated['sarc_count'] / aggregated['valid_json_count']
     aggregated.drop('sarc_count', inplace=True, axis = 1)
-
+    print(aggregated['model'].unique())
     # save 
     aggregated.to_csv('/home/rp-fril-mhpe/results-sarc-ratio.csv', index=False)
 
