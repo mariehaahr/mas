@@ -1,7 +1,7 @@
 from dotenv import load_dotenv
 import argparse, pathlib
 from utils.data import load_claims_text, load_claims_batches
-from utils.prompts import build_conversations_round2, SYSTEM_JSON_GUIDED_R2, USER_R2
+from utils.prompts import build_conversations_round2, SYSTEM_JSON_GUIDED_R2, USER_R2, SARCASTIC_SCHEMA_ROUND2
 from utils.models import load_yaml, init_llm, init_sampling_params, ensure_local_model
 from utils.runner import run_inference
 from utils.io import write_csv, write_jsonl
@@ -41,7 +41,7 @@ def main(args):
 
     if model_cfg['has_default_sampling_params']:        
         # if sampling params specified in huggingface repo
-        sampling = init_sampling_params(decoding_cfg, default = llm.get_default_sampling_params())
+        sampling = init_sampling_params(decoding_cfg, default = llm.get_default_sampling_params(), Schema = SARCASTIC_SCHEMA_ROUND2)
     else:
         # params we have specified
         decoding_cfg = {**decoding_cfg, **model_cfg['sampling']}

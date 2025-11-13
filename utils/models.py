@@ -49,13 +49,13 @@ def init_llm(model_cfg: dict) -> LLM:
     )
 
 
-def init_sampling_params(decoding_cfg: dict, default: SamplingParams) -> SamplingParams:
+def init_sampling_params(decoding_cfg: dict, default: SamplingParams, Schema = SARCASTIC_SCHEMA) -> SamplingParams:
     """
     Function to initialise sampling params. 
     If default: then there are specified sampling params in HuggingFace repo, and we add the other attributes. 
     Otherwise we initialise samplingparams with the specified sampling params. 
     """
-    guided = GuidedDecodingParams(json = SARCASTIC_SCHEMA) if decoding_cfg['use_guided_json'] else None
+    guided = GuidedDecodingParams(json = Schema) if decoding_cfg['use_guided_json'] else None
 
     # If there are default sampling params in huggingface, use all defaults and only write over default params that are specified in decoding_cfg. 
     if default is not None:
