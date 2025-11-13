@@ -1,5 +1,5 @@
 #!/bin/bash
-#SBATCH --job-name=concat-qwen1.5b
+#SBATCH --job-name=concatmistral
 #SBATCH --partition=scavenge
 #SBATCH --cpus-per-task=1
 #SBATCH --time=00:20:00
@@ -12,3 +12,5 @@ set -euo pipefail
 
 # uv run src/analysis.py
 uv run src/concat_results.py
+
+#uv run src/dd.py
