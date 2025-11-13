@@ -34,22 +34,22 @@ def main(args):
 
 
     # init model and sampling 
-    # llm = init_llm(model_cfg=model_cfg)                      
+    llm = init_llm(model_cfg=model_cfg)                      
     
-    # # get sampling params
-    # decoding_cfg = load_yaml(args.decoding_cfg)
+    # get sampling params
+    decoding_cfg = load_yaml(args.decoding_cfg)
 
-    # if model_cfg['has_default_sampling_params']:        
-    #     # if sampling params specified in huggingface repo
-    #     sampling = init_sampling_params(decoding_cfg, default = llm.get_default_sampling_params())
-    # else:
-    #     # params we have specified
-    #     decoding_cfg = {**decoding_cfg, **model_cfg['sampling']}
-    #     sampling = init_sampling_params(decoding_cfg, default = None) # var uden default før
+    if model_cfg['has_default_sampling_params']:        
+        # if sampling params specified in huggingface repo
+        sampling = init_sampling_params(decoding_cfg, default = llm.get_default_sampling_params())
+    else:
+        # params we have specified
+        decoding_cfg = {**decoding_cfg, **model_cfg['sampling']}
+        sampling = init_sampling_params(decoding_cfg, default = None) # var uden default før
     
-    # # print params to output
-    # print('###### SAMPLING PARAMS ######')
-    # print(sampling)
+    # print params to output
+    print('###### SAMPLING PARAMS ######')
+    print(sampling)
 
 
     # write results 
@@ -72,27 +72,25 @@ def main(args):
             examples=batch, 
             system_prompt=args.system, 
             user_template=args.user)
-        print(conversations)
+        # print(conversations)
+   
+        # run inference 
+        texts, parsed = run_inference(llm, conversations=conversations, sampling=sampling, json_format=OutputSarcRound2)
+        valid_json = []
 
-        break   
-    #     for i in range(args.repetition):
-    #         # run inference 
-    #         texts, parsed = run_inference(llm, conversations=conversations, sampling=sampling, json_format=OutputSarcRound2)
-    #         valid_json = []
+        rows = []
+        for ex, t, p in zip(batch, texts, parsed):
+            valid_json = False
+            if p is not None:
+                valid_json = True
+                rows.append({'id': ex['id'], 'model_sender': ex['model_sender'], 'label_sender': ex['label_sender'], 'model_receiver': model_name, 'label_receiver_new': p['label'], 'confidence': p['confidence'], 'valid_json': valid_json, 'raw_text': t})
+            else:
+                rows.append({'id': ex['id'], 'model_sender': ex['model_sender'], 'label_sender': ex['label_sender'], 'model_receiver': model_name, 'label_receiver_new': None, 'confidence': None, 'valid_json': valid_json, 'raw_text': t})
 
-    #         rows = []
-    #         for ex, t, p in zip(batch, texts, parsed):
-    #             valid_json = False
-    #             if p is not None:
-    #                 valid_json = True
-    #                 rows.append({'id': ex['id'], 'model_sender': ex['model_sender'], 'model_receiver': model_name, 'label': p['label'], 'confidence': p['confidence'], 'valid_json': valid_json, 'raw_text': t})
-    #             else:
-    #                 rrows.append({'id': ex['id'], 'model_sender': ex['model_sender'], 'model_receiver': model_name, 'label': None, 'confidence': None, 'valid_json': valid_json, 'raw_text': t})
+        no_rows += len(rows)
+        write_csv(rows, csv_path, ['id', 'model_sender', 'label_sender', 'model_receiver', 'label_receiver_new', 'confidence', 'valid_json', 'raw_text']) #TODO: If history is added, we need old lavel receiver here
 
-    #         no_rows += len(rows)
-    #         write_csv(rows, csv_path, ['id', 'model_sender', 'model_receiver', 'label', 'confidence', 'valid_json', 'raw_text'])
-
-    # print(f'Wrote {no_rows} rows to {outdir}')
+    print(f'Wrote {no_rows} rows to {outdir}')
 
 if __name__ == '__main__':
     t0 = time.perf_counter()
@@ -108,7 +106,7 @@ if __name__ == '__main__':
                         default='configs/decoding.yaml')
         ap.add_argument('--outdir',
                         help='Directory to write results',
-                        default='/results/'),
+                        default='/results/')
         ap.add_argument('--system', 
                         help = 'System prompt string',
                         default=SYSTEM_JSON_GUIDED_R2)
