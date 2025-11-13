@@ -1,10 +1,10 @@
 #!/bin/bash
-#SBATCH --job-name=first-mistral-0.2-7b
+#SBATCH --job-name=first-mistral-0.2-7b-2
 #SBATCH --partition=acltr
 #SBATCH --gres=gpu:1
 #SBATCH --cpus-per-task=4
 #SBATCH --mem=32G
-#SBATCH --time=18:00:00
+#SBATCH --time=25:00:00
 #SBATCH --output=logs/%x.%j.out
 #SBATCH --error=logs/%x.%j.err
 #SBATCH --constraint="gpu_h100|gpu_a100_80gb"
@@ -28,5 +28,5 @@ uv sync
 
 # uv run run-eval.py --model_name mistral-0.3-7b --outdir results/ --repetition 10
 
-uv run run-eval.py --model_name mistral-0.2-7b --outdir results/ --repetition 10
+uv run run-eval.py --model_name mistral-0.2-7b --outdir results/ --repetition 10 --dataset_path data/sarc/sarcasm2-mistral2.csv
 
