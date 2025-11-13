@@ -74,6 +74,8 @@ def build_conversations_round2(
     '''
     convs: List[List[Dict[str, str]]] = []
 
+    print(examples)
+
     for ex in examples:
         
         convs.append([
