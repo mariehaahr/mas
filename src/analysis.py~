@@ -5,6 +5,7 @@ import numpy as np
 import pathlib, yaml
 import matplotlib as mpl
 
+
 # For displaying results in output file 
 pd.set_option('display.max_columns', None)
 pd.set_option('display.max_rows', None)
@@ -89,9 +90,9 @@ def plot_label_distribution(df, perc=True):
     
     sns.despine()
 
-    ax.set_ylabel('Percentage' if perc else 'Count')
-    ax.set_xlabel('Model')
-    ax.set_title('Prediction Label Distribution by Model')
+    ax.ylabel('Percentage' if perc else 'Count')
+    ax.xlabel('Model')
+    ax.title('Prediction Label Distribution by Model')
     plt.xticks(rotation=45)
     plt.tight_layout()
 
@@ -136,4 +137,3 @@ def main():
 
 if __name__ == '__main__':
     main()
-
