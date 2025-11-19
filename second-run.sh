@@ -1,5 +1,5 @@
 #!/bin/bash
-#SBATCH --job-name=qwen7b-2ndrun
+#SBATCH --job-name=mistral-0.3-7b-2ndrun
 #SBATCH --partition=acltr
 #SBATCH --gres=gpu:1
 #SBATCH --cpus-per-task=4
@@ -21,5 +21,5 @@ set -euo pipefail
 
 uv sync 
 
-uv run run-eval-round2.py --model_name qwen-2.5-7b --outdir results/ --dataset_path /home/rp-fril-mhpe/input_qwen-2.5-7b.csv
+uv run run-eval-round2.py --model_name mistral-0.3-7b --outdir /home/rp-fril-mhpe --dataset_path /home/rp-fril-mhpe/input_mistral-0.3-7b.csv
 
