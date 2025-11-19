@@ -3,7 +3,7 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 import numpy as np
 import pathlib, yaml
-import matplotlib as mlp
+import matplotlib as mpl
 
 # For displaying results in output file 
 pd.set_option('display.max_columns', None)
@@ -51,7 +51,7 @@ def plot_sarc_distribution(df, kde = True):
 
     plt.tight_layout()
     sns.despine()
-    plt.savefig('results/plots/label-dist-all.png', dpi = 300, bbox_inches='tight')
+    plt.savefig('plots/label-dist-all.png', dpi = 300, bbox_inches='tight')
 
 
 def plot_label_distribution(df, perc=True):
@@ -89,13 +89,13 @@ def plot_label_distribution(df, perc=True):
     
     sns.despine()
 
-    ax.ylabel('Percentage' if perc else 'Count')
-    ax.xlabel('Model')
-    ax.title('Prediction Label Distribution by Model')
+    ax.set_ylabel('Percentage' if perc else 'Count')
+    ax.set_xlabel('Model')
+    ax.set_title('Prediction Label Distribution by Model')
     plt.xticks(rotation=45)
     plt.tight_layout()
 
-    plt.savefig('results/plots/label-distr-r1.png', dpi = 300, bbox_inches='tight')
+    plt.savefig('plots/label-distr-r1.png', dpi = 300, bbox_inches='tight')
 
 def plot_valid_json_distribution(df, perc=True):
     fig, axs = plt.subplots(ncols=2, nrows=3, figsize=(16,12), sharey=True)
@@ -119,7 +119,7 @@ def plot_valid_json_distribution(df, perc=True):
 
     sns.despine()
     plt.tight_layout()
-    plt.savefig('results/plots/valid-json-dist-r1.png', dpi = 300, bbox_inches='tight')
+    plt.savefig('plots/valid-json-dist-r1.png', dpi = 300, bbox_inches='tight')
 
     
 
@@ -127,7 +127,7 @@ def check_input_r2(df):
     pass 
 
 def main():
-    sarc_ratio_df = pd.read_csv('/home/rp-fril-mhpe/sarcasm-ratio.csv')
+    sarc_ratio_df = pd.read_csv('/home/rp-fril-mhpe/results-sarc-ratio.csv')
 
     plot_sarc_distribution(sarc_ratio_df)
     plot_label_distribution(sarc_ratio_df)
@@ -136,3 +136,4 @@ def main():
 
 if __name__ == '__main__':
     main()
+

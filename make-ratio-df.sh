@@ -12,4 +12,5 @@ echo "Host: $(hostname)"
 
 set -euo pipefail
 
-uv run src/ratio.py
+uv run src/ratio.py --round 1
+uv run src/ratio.py --round 2

@@ -1,5 +1,5 @@
 #!/bin/bash
-#SBATCH --job-name=concatmistral
+#SBATCH --job-name=plots-analysis
 #SBATCH --partition=scavenge
 #SBATCH --cpus-per-task=1
 #SBATCH --time=00:20:00
