@@ -15,14 +15,14 @@ output_mistral = Path("/home/rp-fril-mhpe/clean-second-mistral-0.3-7b.csv")
 output_qwen    = Path("/home/rp-fril-mhpe/clean-second-qwen-2.5-7b.csv")
 
 # load data
-df_mistral = pd.read_csv(mistral_path)
-df_qwen    = pd.read_csv(qwen_path)
+df_m = pd.read_csv(mistral_path)
+df_q    = pd.read_csv(qwen_path)
 
 
 
 # remove where sender = llama-3.2-1b, just from the data
-df_mistral = df_mistral[df_mistral["model_sender"] != out].copy()
-df_qwen    = df_qwen[df_qwen["model_sender"] != out].copy()
+df_mistral = df_m[df_m["model_sender"] != out].copy()
+df_qwen    = df_q[df_q["model_sender"] != out].copy()
 
 
 
@@ -56,3 +56,13 @@ print(f"qwen columns: {df_qwen.columns}")
 # save data as
 mistral_new_path = "/home/rp-fril-mhpe/clean-second-mistral-0.3-7b.csv"
 qwen_new_path = "/home/rp-fril-mhpe/clean-second-qwen-2.5-7b.csv"
+
+df_mistral.to_csv(output_mistral, index=False)
+df_qwen.to_csv(output_qwen, index=False)
+
+print(f"Cleaned mistral.... before: {df_m.shape}, and after: {df_mistral.shape}")
+print(f"Cleaned qwen.... before: {df_q.shape}, and after: {df_qwen.shape}")
+
+print("Saved to:")
+print(" -", output_mistral)
+print(" -", output_qwen)
