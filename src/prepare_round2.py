@@ -10,7 +10,7 @@ from pathlib import Path
 
 # argument -> receiver model
 receiver = sys.argv[1]  # give the name of the receiver as argument in the run file
-lookup_path = Path("/home/rp-fril-mhpe/results-sarc-ratio.csv").expanduser()
+lookup_path = Path("/home/rp-fril-mhpe/first-results-sarc-ratio.csv").expanduser()
 results_dir = Path("/home/rp-fril-mhpe").expanduser()
 
 with open("configs/models.yaml", "r") as f:
