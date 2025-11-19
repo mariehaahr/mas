@@ -18,9 +18,14 @@ with open("configs/models.yaml", "r") as f:
 
 
 model_names = list(data["profiles"].keys())
+# remove llama 1b from the models                                                                       #TODO: new
+model_names.remove("llama-3.2-1b")
+
 all_models = [f"first-{m}" for m in model_names] # TODO: 
 
 senders = [m for m in all_models if m != receiver] # all models but the receiver
+
+
 
 lookup = pd.read_csv(lookup_path) # lookup table frida made
 
@@ -53,6 +58,9 @@ for sender in senders:
         on="id",
         suffixes=("_receiver", "_sender")
     )
+
+    # remove rows where either receiver or sender has valid_json < 5.                                    #TODO: new
+    merged = merged[(merged["valid_json_count_receiver"] >= 5) & (merged["valid_json_count_sender"] >= 5)]
 
     # masking again, but where they disagree
     mask = (
