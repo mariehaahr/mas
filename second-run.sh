@@ -1,5 +1,9 @@
 #!/bin/bash
+<<<<<<< HEAD
 #SBATCH --job-name=qwen-2.5-1.5b-2ndrun
+=======
+#SBATCH --job-name=llama-3.2-7b-2ndrun
+>>>>>>> 41e1257 (update second-run.sh to llama)
 #SBATCH --partition=acltr
 #SBATCH --gres=gpu:1
 #SBATCH --cpus-per-task=4
