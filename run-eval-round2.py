@@ -57,7 +57,7 @@ def main(args):
     outdir.mkdir(parents = True, exist_ok = True)
     
     # jsonl_path = outdir / f'{args.model_name}_round2.jsonl'
-    csv_path = outdir / f'{args.model_name}_round2.csv'
+    csv_path = outdir / f'second-{args.model_name}.csv'
 
     no_rows = 0
 
