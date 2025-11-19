@@ -25,7 +25,7 @@ def load_claims_batches(
     data = pd.read_csv(path)
 
     if start >= len(data):
-        raise Valuerror('Start is larger than size of data.')
+        raise ValueError('Start is larger than size of data.')
     
     end = len(data) if limit is None else min(len(data), start+limit)
     
