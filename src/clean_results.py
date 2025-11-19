@@ -6,7 +6,7 @@ import yaml
 # id,model_sender,label_sender,model_receiver,label_receiver_new,confidence,valid_json,raw_text
 mistral_path = Path((f"/home/rp-fril-mhpe/second-mistral-0.3-7b.csv"))
 qwen_path = Path((f"/home/rp-fril-mhpe/second-qwen-2.5-7b.csv"))
-lookup1_path = Path("/home/rp-fril-mhpe/results-sarc-ratio.csv")   # round 1 lookup
+lookup1_path = Path("/home/rp-fril-mhpe/first-results-sarc-ratio.csv")   # round 1 lookup
 
 out = "llama-3.2-1b" # model we remove
 
