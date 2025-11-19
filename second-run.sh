@@ -1,9 +1,13 @@
 #!/bin/bash
 <<<<<<< HEAD
+<<<<<<< HEAD
 #SBATCH --job-name=qwen-2.5-1.5b-2ndrun
 =======
 #SBATCH --job-name=llama-3.2-7b-2ndrun
 >>>>>>> 41e1257 (update second-run.sh to llama)
+=======
+#SBATCH --job-name=mistral-0.2-7b-2ndrun
+>>>>>>> 478a8a9 (ready to run mistral-0.2-7b for round 2)
 #SBATCH --partition=acltr
 #SBATCH --gres=gpu:1
 #SBATCH --cpus-per-task=4
@@ -27,6 +31,7 @@ uv sync
 
 #uv run run-eval-round2.py --model_name mistral-0.3-7b --outdir /home/rp-fril-mhpe --dataset_path /home/rp-fril-mhpe/input_mistral-0.3-7b.csv
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 # already done: mistral-0.3-7b and qwen-2.5-7b
 uv run run-eval-round2.py --model_name llama-3.2-3b --outdir /home/rp-fril-mhpe --dataset_path /home/rp-fril-mhpe/input_llama-3.2-3b.csv
@@ -34,3 +39,7 @@ uv run run-eval-round2.py --model_name llama-3.2-3b --outdir /home/rp-fril-mhpe 
 
 
 uv run run-eval-round2.py --model_name qwen-2.5-1.5b --outdir /home/rp-fril-mhpe --dataset_path /home/rp-fril-mhpe/input_qwen-2.5-1.5b.csv
+=======
+#uv run run-eval-round2.py --model_name qwen-2.5-1.5b --outdir /home/rp-fril-mhpe --dataset_path /home/rp-fril-mhpe/input_qwen-2.5-1.5b.csv
+uv run run-eval-round2.py --model_name mistral-0.2-7b --outdir /home/rp-fril-mhpe --dataset_path /home/rp-fril-mhpe/input_mistral-0.2-7b.csv
+>>>>>>> 478a8a9 (ready to run mistral-0.2-7b for round 2)
