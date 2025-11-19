@@ -22,6 +22,11 @@ set -euo pipefail
 uv sync 
 
 #uv run run-eval-round2.py --model_name mistral-0.3-7b --outdir /home/rp-fril-mhpe --dataset_path /home/rp-fril-mhpe/input_mistral-0.3-7b.csv
+<<<<<<< HEAD
+=======
+# already done: mistral-0.3-7b and qwen-2.5-7b
+uv run run-eval-round2.py --model_name llama-3.2-3b --outdir /home/rp-fril-mhpe --dataset_path /home/rp-fril-mhpe/input_llama-3.2-3b.csv
+>>>>>>> f178642 (ready for round 2 rest, llama-3.2-3b)
 
 
 uv run run-eval-round2.py --model_name qwen-2.5-1.5b --outdir /home/rp-fril-mhpe --dataset_path /home/rp-fril-mhpe/input_qwen-2.5-1.5b.csv
