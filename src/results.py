@@ -10,8 +10,8 @@ outpath = Path((f"/home/rp-fril-mhpe/results.csv"))
 
 
 # load lookup tables
-lookup_r1_path = Path("/home/rp-fril-mhpe/results-sarc-ratio.csv").expanduser()
-lookup_r2_path = Path("/home/rp-fril-mhpe/results-sarc-ratio-second.csv").expanduser()
+lookup_r1_path = Path("/home/rp-fril-mhpe/first-results-sarc-ratio.csv").expanduser()
+lookup_r2_path = Path("/home/rp-fril-mhpe/second-results-sarc-ratio.csv").expanduser()
 lookup1 = pd.read_csv(lookup_r1_path) 
 lookup2 = pd.read_csv(lookup_r2_path) 
 
