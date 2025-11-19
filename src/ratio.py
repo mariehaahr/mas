@@ -15,14 +15,19 @@ def make_ratio(round_num: int):
     dfs = []
     # read in all results
     for m_name in model_names:
-        if round == 1: 
+        if round_num == 1: 
             p = f'/home/rp-fril-mhpe/first-{m_name}.csv'
+        
         else:
             p = f'/home/rp-fril-mhpe/second-{m_name}.csv'
 
         try:
-            df = pd.read_csv(p)
+            df = pd.read_csv(p, low_memory=False)
+            print(f'reading {p}')
+            print(df.columns)
             dfs.append(df)
+        
+        
         except FileNotFoundError:
             print(f'File not found: {p}')
         except Exception as e:
@@ -39,7 +44,8 @@ def make_ratio(round_num: int):
         group_cols = ['model_sender', 'id', 'model_receiver']
         label_col = 'label_receiver_new'
         save_as = 'second-results-sarc-ratio.csv'
-
+    print(combined.columns)
+    print(f'round {round_num}')
     # group by cols
     aggregated = (
     combined.groupby(group_cols, as_index=False)
