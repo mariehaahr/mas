@@ -3,77 +3,135 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 import numpy as np
 import pathlib, yaml
+import matplotlib as mlp
 
+# For displaying results in output file 
 pd.set_option('display.max_columns', None)
 pd.set_option('display.max_rows', None)
 
+# Set theme across all plots 
+sns.set_theme(
+    style="whitegrid",
+    palette="Paired",     
+    font_scale=1.2       
+)
 
-def label_distribution(sarcasm_ratio_df):
-    sarcasm_ratio_df["label"] = np.where(sarcasm_ratio_df["sarc_ratio"] >= 0.5, "sarcastic", "literal")
+# matplotlib params 
+mpl.rcParams.update({
+    "figure.dpi": 100,
+    "savefig.dpi": 300,
+    "axes.titlesize": 16,
+    "axes.labelsize": 13,
+    "xtick.labelsize": 11,
+    "ytick.labelsize": 11,
+    "legend.fontsize": 11,
+    "axes.spines.top": False,
+    "axes.spines.right": False,
+    "axes.titlepad": 10,
+})
+
+
+def plot_sarc_distribution(df, kde = True):
+    '''
+    Plotting the sarcasm ratio distribution of results in round 1. 
+    '''
+
+    fig, axs = plt.subplots(ncols=2, nrows=3, figsize=(16,12), sharey=True)
+
+    models = df['model'].unique()
+    for model_name, ax in zip(models, axs.ravel()):
+        model_res = df[df['model'] == model_name].copy()
+
+        if kde:
+            sns.kdeplot(data=model_res, ax=ax, x = 'sarc_ratio')
+        else:
+            sns.histplot(data=model_res, ax=ax, x = 'sarc_ratio')
+
+        ax.set_title(f'{model_name}')
+
+    plt.tight_layout()
+    sns.despine()
+    plt.savefig('results/plots/label-dist-all.png', dpi = 300, bbox_inches='tight')
+
+
+def plot_label_distribution(df, perc=True):
+    df = df.copy()
+
+    df['label'] = df['sarc_ratio'].apply(
+        lambda x: 'sarcastic' if x >= 0.5 else 'literal'
+    )
+    df['label'] = df['label'].astype(
+        pd.CategoricalDtype(categories=['sarcastic', 'literal'])
+    )
+
+    counts = df.groupby(['model', 'label'], observed=False).size().reset_index(name='count')
+
+    if perc:
+        counts['value'] = (counts['count'] / counts.groupby('model')['count'].transform('sum'))
+
+    else:
+        counts['value'] = counts['count']
+
+    # sort according to value
+    sorted_models = counts.sort_values(by = 'value', ascending=False).model.to_list()
+    print(f'Label counts for each model: {counts}')
+
+    plt.figure(figsize=(12, 6))
+
+    ax = sns.barplot(
+        data=counts,
+        x='model',
+        y='value',
+        hue='label',
+        hue_order=['sarcastic', 'literal'],
+        order=sorted_models)
 
     
-    pass
+    sns.despine()
 
+    ax.ylabel('Percentage' if perc else 'Count')
+    ax.xlabel('Model')
+    ax.title('Prediction Label Distribution by Model')
+    plt.xticks(rotation=45)
+    plt.tight_layout()
 
+    plt.savefig('results/plots/label-distr-r1.png', dpi = 300, bbox_inches='tight')
 
+def plot_valid_json_distribution(df, perc=True):
+    fig, axs = plt.subplots(ncols=2, nrows=3, figsize=(16,12), sharey=True)
+    
+    models = df['model'].unique()
+    
+    for model_name, ax in zip(models, axs.ravel()):
+        model_res = df[df['model'] == model_name].copy()
+
+        if perc: 
+            counts = model_res['valid_json_count'].value_counts(normalize=True).sort_index()
+            sns.barplot(x=counts.index, y=counts.values, ax=ax)
+            ax.set_ylabel('Percentage')
+
+        else: 
+            sns.countplot(data=model_res, ax=ax, x = 'valid_json_count')
+            ax.set_ylabel('Count')
+
+        ax.set_title(f'{model_name}')
+        ax.set_xlabel('Valid output count')
+
+    sns.despine()
+    plt.tight_layout()
+    plt.savefig('results/plots/valid-json-dist-r1.png', dpi = 300, bbox_inches='tight')
+
+    
+
+def check_input_r2(df):
+    pass 
 
 def main():
-    profiles_root = yaml.safe_load(pathlib.Path('configs/models.yaml').read_text())
-    profiles = profiles_root.get('profiles', {})
-    model_names = profiles.keys()
-
-
     sarc_ratio_df = pd.read_csv('/home/rp-fril-mhpe/sarcasm-ratio.csv')
 
-
-   labels = (
-   sarc_ratio_df[sarc_ratio_df['sarc_ratio'] >= 0.5].groupby('model').size()
-   )
-
-   print(labels)
-
-   unique_valid_json = (
-        sarc_ratio_df.groupby('model').['valid_json_count'].apply(lambda: x np.unique(x, return_counts = True))
-        )
-
-   print(unique_valid_json)
-   
-   formatted_unique_counts = {
-    model: {"values": vals, "counts": cnts}
-    for model, (vals, cnts) in unique_valid_json.items()}
-    print("\nUnique valid_json_count values and counts per model:")
-for model, d in formatted_unique_counts.items():
-    print(f"\nModel: {model}")
-    print("Values:", d["values"])
-    print("Counts:", d["counts"])
-
-    dfs = []
-    # read in all results
-    for m_name in model_names:
-        p = f'/home/rp-fril-mhpe/first-{m_name}.csv'
-
-        try:
-            df = pd.read_csv(p)
-            dfs.append(df)
-        except FileNotFoundError:
-            print(f'File not found: {p}')
-        except Exception as e:
-            print(f'Error loading file: {p}, {e}')
-
-    combined = pd.concat(dfs, ignore_index=True)
-
-
-
-    # group by model, id
-    aggregated = (
-    combined.groupby(['model', 'id'], as_index=False)
-    .agg(
-        sarc_count=('label', lambda x: (x == 'sarcastic').sum()),
-        valid_json_count=('valid_json', lambda x: (x == True).sum()),
-        )
-    )
-    aggregated['sarc_ratio'] = aggregated['sarc_count'] / aggregated['valid_json_count']
-    aggregated.drop('sarc_count', inplace=True, axis = 1)
+    plot_sarc_distribution(sarc_ratio_df)
+    plot_label_distribution(sarc_ratio_df)
+    plot_valid_json_distribution(sarc_ratio_df)
 
 
 if __name__ == '__main__':
