@@ -18,19 +18,12 @@ output_qwen    = Path("/home/rp-fril-mhpe/clean-second-qwen-2.5-7b.csv")
 df_m = pd.read_csv(mistral_path)
 df_q    = pd.read_csv(qwen_path)
 
-
+before_m = len(df_m)
+before_q = len(df_q)
 
 # remove where sender = llama-3.2-1b, just from the data
 df_mistral = df_m[df_m["model_sender"] != out].copy()
 df_qwen    = df_q[df_q["model_sender"] != out].copy()
-
-
-
-
-# remove json < 5 by using the lookup from round 1
-    # load lookup 1 
-    # mask all claims where valid_json_count < 5
-    # remove mask from data (overwrite)
 
 # load lookup table
 lookup1 = pd.read_csv(lookup1_path)
@@ -38,31 +31,49 @@ lookup1 = pd.read_csv(lookup1_path)
 # keep only id and valid_json_count
 lookup = lookup1[["id", "valid_json_count"]]
 
-# merge with data
-df_mistral = df_mistral.merge(lookup, on="id", how="left")
-df_qwen    = df_qwen.merge(lookup, on="id", how="left")
 
-# remove rows where round-1 valid_json_count < 5
-df_mistral = df_mistral[df_mistral["valid_json_count"] >= 5].copy()
-df_qwen    = df_qwen[df_qwen["valid_json_count"] >= 5].copy()
+# merge
 
-# remove valid_json_count, since this should not be in the final data
-df_mistral = df_mistral.drop(columns=["valid_json_count"])
-df_qwen    = df_qwen.drop(columns=["valid_json_count"])
+df_m = df_m.merge(lookup, on="id", how="left")
+df_q = df_q.merge(lookup, on="id", how="left")
 
-print(f"mistral columns: {df_mistral.columns}")
-print(f"qwen columns: {df_qwen.columns}")
+# remove json < 5 by using the lookup from round 1
+df_m = df_m[df_m["valid_json_count"] >= 5].copy()
+df_q = df_q[df_q["valid_json_count"] >= 5].copy()
 
-# save data as
-mistral_new_path = "/home/rp-fril-mhpe/clean-second-mistral-0.3-7b.csv"
-qwen_new_path = "/home/rp-fril-mhpe/clean-second-qwen-2.5-7b.csv"
+# remove llama
+df_m_before_sender_filter = len(df_m)
+df_q_before_sender_filter = len(df_q)
 
-df_mistral.to_csv(output_mistral, index=False)
-df_qwen.to_csv(output_qwen, index=False)
+df_m = df_m[df_m["model_sender"] != out].copy()
+df_q = df_q[df_q["model_sender"] != out].copy()
 
-print(f"Cleaned mistral.... before: {df_m.shape}, and after: {df_mistral.shape}")
-print(f"Cleaned qwen.... before: {df_q.shape}, and after: {df_qwen.shape}")
+removed_mistral = before_m - len(df_m)
+removed_qwen    = before_q - len(df_q)
 
-print("Saved to:")
+
+# remove column
+df_m = df_m.drop(columns=["valid_json_count"])
+df_q = df_q.drop(columns=["valid_json_count"])
+
+
+# save
+df_m.to_csv(output_mistral, index=False)
+df_q.to_csv(output_qwen, index=False)
+
+
+print(f"mistral columns: {df_m.columns.tolist()}")
+print(f"qwen columns: {df_q.columns.tolist()}")
+
+print("\nRows removed (total):")
+print(f" - mistral: {removed_mistral}")
+print(f" - qwen   : {removed_qwen}")
+
+print("\nDetailed sanity check:")
+print(f" - mistral before merge: {before_m}, after clean: {len(df_m)}")
+print(f" - qwen before merge:    {before_q}, after clean: {len(df_q)}")
+
+print("\nSaved to:")
 print(" -", output_mistral)
 print(" -", output_qwen)
+
