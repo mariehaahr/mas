@@ -26,7 +26,26 @@ def main():
     sarc_ratio_df = pd.read_csv('/home/rp-fril-mhpe/sarcasm-ratio.csv')
 
 
-    
+   labels = (
+   sarc_ratio_df[sarc_ratio_df['sarc_ratio'] >= 0.5].groupby('model').size()
+   )
+
+   print(labels)
+
+   unique_valid_json = (
+        sarc_ratio_df.groupby('model').['valid_json_count'].apply(lambda: x np.unique(x, return_counts = True))
+        )
+
+   print(unique_valid_json)
+   
+   formatted_unique_counts = {
+    model: {"values": vals, "counts": cnts}
+    for model, (vals, cnts) in unique_valid_json.items()}
+    print("\nUnique valid_json_count values and counts per model:")
+for model, d in formatted_unique_counts.items():
+    print(f"\nModel: {model}")
+    print("Values:", d["values"])
+    print("Counts:", d["counts"])
 
     dfs = []
     # read in all results
