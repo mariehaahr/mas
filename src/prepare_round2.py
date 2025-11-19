@@ -60,7 +60,7 @@ for sender in senders:
     )
 
     # remove rows where either receiver or sender has valid_json < 5.                                    #TODO: new
-    merged = merged[(merged["valid_json_receiver"] >= 5) & (merged["valid_json_sender"] >= 5)]
+    merged = merged[(merged["valid_json_count_receiver"] >= 5) & (merged["valid_json_count_sender"] >= 5)]
 
     # masking again, but where they disagree
     mask = (
