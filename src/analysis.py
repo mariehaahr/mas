@@ -111,8 +111,8 @@ def plot_valid_json_distribution(df, perc=True):
 
         if perc: 
             counts = model_res['valid_json_count'].value_counts(normalize=True).sort_index()
-            counts.values = counts.values*100
-            sns.barplot(x=counts.index, y=counts.values, ax=ax)
+            counts_perc = counts * 100
+            sns.barplot(x=counts_perc, y=counts.values, ax=ax)
             ax.set_ylabel('Percentage')
 
         else: 
