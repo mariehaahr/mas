@@ -1,0 +1,132 @@
+from collections import defaultdict # storing results
+import pandas as pd # dataframe
+from pathlib import Path # loading data
+import yaml # loading model names from the yaml files
+
+# results file
+resultspath = Path("/home/rp-fril-mhpe/results.csv").expanduser()
+# load
+results = pd.read_csv(resultspath)
+
+# to store the flip percentage, count, and total count (that made that %)
+
+# total = {"influencer1": [70%, 70, 100], "influencer2": [30%, 300, 1000] ...}
+total = defaultdict(list) 
+# per_sender = {influencer1: {receiver1: [x, y, z]}, receiver2...} influencer2...}}
+per_receiver = defaultdict(lambda: defaultdict(list))
+
+up = defaultdict(lambda: defaultdict(list)) # -..-
+down = defaultdict(lambda: defaultdict(list)) # -..-
+
+# load model names from yaml
+with open("configs/models.yaml", "r") as f:
+    data = yaml.safe_load(f)
+
+model_names = list(data["profiles"].keys())
+# remove llama 1b from the models                                                                       #TODO: new
+model_names.remove("llama-3.2-1b")
+
+for influencer in model_names:
+    # mask results where model_sender == influencer
+    mask1 = results[results["model_sender"] == influencer]
+    # make sure no division by 0 mistake
+    if len(mask1) == 0:
+        avg_flip = 0
+    else:
+        avg_flip = sum(mask1["flip"]) / len(mask1)
+
+    total[influencer].append(avg_flip) # save the flip %
+    total[influencer].append(sum(mask1["flip"])) # save the # of flips
+    total[influencer].append(len(mask1)) # save the number of possible flips
+
+    # now looking into each model
+    for receiver in model_names:
+        if receiver == influencer: # cant influence yourself, so skip
+            continue
+        # doing the same as above, now just for this specific receiver
+        mask2 = mask1[mask1["model_receiver"] == receiver]
+        if len(mask2) == 0:
+            avg_flip = 0
+        else:
+            avg_flip = sum(mask2["flip"]) / len(mask2)
+
+        per_receiver[influencer][receiver].append(avg_flip)
+        per_receiver[influencer][receiver].append(sum(mask2["flip"]))
+        per_receiver[influencer][receiver].append(len(mask2))
+
+        # now dividing into up and down (aka 0->1 and 1->0)
+        upmask = mask2[mask2["flip_direction"] == "up"]
+        downmask = mask2[mask2["flip_direction"] == "down"]
+        if len(upmask) == 0:
+            up_avg_flip = 0
+        else:
+            up_avg_flip = sum(upmask["flip"]) / len(upmask)
+        
+        up[influencer][receiver].append(up_avg_flip)
+        up[influencer][receiver].append(sum(upmask["flip"]))
+        up[influencer][receiver].append(len(upmask))
+        
+        if len(downmask) == 0:
+            down_avg_flip = 0
+        else:
+            down_avg_flip = sum(downmask["flip"]) / len(downmask)
+        
+        down[influencer][receiver].append(down_avg_flip)
+        down[influencer][receiver].append(sum(downmask["flip"]))
+        down[influencer][receiver].append(len(downmask))
+
+print("------------------------------- RESULTS ---------------------------")
+
+
+
+for model in model_names:
+    print(" - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - ")
+    print("                                OVERALL RESULTS                              ")
+    print(f"---------LOOKING AT MODEL {model}")
+    print(f"Flip %: {(total[model][0]) * 100}%")
+    print(f"Number of flips: {total[model][1]}")
+    print(f"Out of: {total[model][2]}")
+
+    print(f"                    WHICH MODELS DID {model} IT INFLUENCE MOST?              ")
+    for receiver in model_names:
+        if receiver == model:
+            continue
+        print(f"------------------------FOR RECEIVER: {receiver}")
+        print(f"Flip %: {(per_receiver[model][receiver][0])*100}%")
+        print(f"Number of flips: {per_receiver[model][receiver][1]}")
+        print(f"Out of {per_receiver[model][receiver][2]}")
+
+print("-----------------------------------------------------------------------------------------")
+print("------------------------- LOOKING AT 0 -> 1, THE LABEL GOING UP -------------------------")
+
+print("from literal to sarcastic")
+
+for model in model_names:
+    print(" - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - ")
+    print(f"---------LOOKING AT MODEL {model}")
+
+    for receiver in model_names:
+        if receiver == model:
+            continue
+        print(f"------------------------FOR RECEIVER: {receiver}")
+        print(f"Flip %: {(up[model][receiver][0])*100}%")
+        print(f"Number of flips: {up[model][receiver][1]}")
+        print(f"Out of {up[model][receiver][2]}")
+
+
+print("-----------------------------------------------------------------------------------------")
+print("------------------------- LOOKING AT 1 -> 0, THE LABEL GOING DOWN -------------------------")
+
+print("from sarcastic to literal")
+
+for model in model_names:
+    print(" - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - ")
+    print(f"---------LOOKING AT MODEL {model}")
+
+    for receiver in model_names:
+        if receiver == model:
+            continue
+        print(f"------------------------FOR RECEIVER: {receiver}")
+        print(f"Flip %: {(down[model][receiver][0])*100}%")
+        print(f"Number of flips: {down[model][receiver][1]}")
+        print(f"Out of {down[model][receiver][2]}")
