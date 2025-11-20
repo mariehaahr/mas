@@ -171,8 +171,8 @@ def plot_input_r2():
     )
 
 
-    ax.xaxis.set_label_position('top')
-    ax.xaxis.tick_top()
+    # ax.xaxis.set_label_position('top')
+    # ax.xaxis.tick_top()
 
     plt.setp(
         ax.get_xticklabels(),
@@ -180,7 +180,7 @@ def plot_input_r2():
         ha='right',
         rotation_mode='anchor'
     )
-    
+
     ax.set_yticklabels(ax.get_yticklabels(), rotation = 0)
 
     
