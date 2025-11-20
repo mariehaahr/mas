@@ -132,7 +132,7 @@ def plot_valid_json_distribution(df, perc=True):
 def plot_input_r2():
     profiles_root = yaml.safe_load(pathlib.Path('configs/models.yaml').read_text())
     profiles = profiles_root.get('profiles', {})
-    model_names = profiles.keys()
+    model_names = list(profiles.keys())
     model_names.remove('llama-3.2-1b')
 
     dfs = [] 
