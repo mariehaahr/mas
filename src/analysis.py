@@ -125,14 +125,14 @@ def plot_valid_json_distribution(df, perc=True):
 
     
 
-def check_input_r2(df):
+def plot_input_r2():
     profiles_root = yaml.safe_load(pathlib.Path('configs/models.yaml').read_text())
     profiles = profiles_root.get('profiles', {})
     model_names = profiles.keys()
 
     dfs = [] 
     for model_n in model_names:
-        p = f'input_{model_n}.csv'
+        p = f'/home/rp-fril-mhpe/input_{model_n}.csv'
         try:
             df = pd.read_csv(p, low_memory=False)
             # print(f'reading {p}')
@@ -265,7 +265,8 @@ def main():
     plot_sarc_distribution(sarc_ratio_df)
     plot_label_distribution(sarc_ratio_df)
     plot_valid_json_distribution(sarc_ratio_df)
-
+    plot_heatmaps_sarc_ratio(sarc_ratio_df)
+    plot_input_r2()
     
 
 if __name__ == '__main__':
