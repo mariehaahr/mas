@@ -38,18 +38,19 @@ def plot_sarc_distribution(df, kde = True):
     Plotting the sarcasm ratio distribution of results in round 1. 
     '''
 
-    fig, axs = plt.subplots(ncols=2, nrows=3, figsize=(16,12), sharey=True)
+    fig, axs = plt.subplots(ncols=2, nrows=3, figsize=(16,12))
 
     models = df['model'].unique()
     for model_name, ax in zip(models, axs.ravel()):
         model_res = df[df['model'] == model_name].copy()
 
         if kde:
-            sns.kdeplot(data=model_res, ax=ax, x = 'sarc_ratio')
+            sns.kdeplot(data=model_res, ax=ax, x = 'sarc_ratio', fill=True)
         else:
             sns.histplot(data=model_res, ax=ax, x = 'sarc_ratio')
 
         ax.set_title(f'{model_name}')
+        ax.set_xlabel('Sarcasm Ratio')
 
     plt.tight_layout()
     sns.despine()
@@ -69,7 +70,7 @@ def plot_label_distribution(df, perc=True):
     counts = df.groupby(['model', 'label'], observed=False).size().reset_index(name='count')
 
     if perc:
-        counts['value'] = (counts['count'] / counts.groupby('model')['count'].transform('sum'))
+        counts['value'] = (counts['count'] / counts.groupby('model')['count'].transform('sum')) * 100
 
     else:
         counts['value'] = counts['count']
@@ -93,6 +94,7 @@ def plot_label_distribution(df, perc=True):
 
     ax.set_ylabel('Percentage' if perc else 'Count')
     ax.set_xlabel('Model')
+    plt.legend(title= "Label", loc= "upper right")
     ax.set_title('Prediction Label Distribution by Model')
     plt.xticks(rotation=45)
     plt.tight_layout()
@@ -109,6 +111,7 @@ def plot_valid_json_distribution(df, perc=True):
 
         if perc: 
             counts = model_res['valid_json_count'].value_counts(normalize=True).sort_index()
+            counts.values = counts.values*100
             sns.barplot(x=counts.index, y=counts.values, ax=ax)
             ax.set_ylabel('Percentage')
 
@@ -122,7 +125,8 @@ def plot_valid_json_distribution(df, perc=True):
     sns.despine()
     plt.tight_layout()
     plt.savefig('plots/valid-json-dist-r1.png', dpi = 300, bbox_inches='tight')
-
+    print('Valid output counts: \n')
+    print(counts)
     
 
 def plot_input_r2():
@@ -135,8 +139,6 @@ def plot_input_r2():
         p = f'/home/rp-fril-mhpe/input_{model_n}.csv'
         try:
             df = pd.read_csv(p, low_memory=False)
-            # print(f'reading {p}')
-            # print(df.columns)
             dfs.append(df)
 
 
@@ -158,24 +160,28 @@ def plot_input_r2():
 
     plt.figure()
 
-    sns.heatmap(
+    ax = sns.heatmap(
         heatmap_df,
         cmap='Blues',
         annot=True,
-        fmt="g"
+        annot_kws={"fontsize":6},
+        fmt=".0f",
+        cbar_kws={'shrink': 0.8}
     )
 
 
-    plt.gca().xaxis.set_label_position('top')
-    plt.gca().xaxis.tick_top()
+    ax.xaxis.set_label_position('top')
+    ax.xaxis.tick_top()
+    ax.set_xticklabels(ax.get_xticklabels(), rotation = 45, ha='right')
+    ax.set_yticklabels(ax.get_yticklabels(), rotation = 0)
+
     
-    plt.title('Count of (sender, receiver) pairs', pad=15)
+    plt.title('Count of (sender, receiver) pairs', pad=30)
     plt.xlabel('Receiver')
     plt.ylabel('Sender')
 
     plt.tight_layout()
     plt.savefig('plots/heatmap-input-second.png', dpi = 300, bbox_inches="tight")
-
 
 
 
@@ -227,7 +233,7 @@ def plot_heatmaps_sarc_ratio(df):
         
         annot_matrix = H_pct.copy().astype(object)
         annot_matrix = annot_matrix.map(
-            lambda v: "" if round(v, 5) == 0 else f"{v:.1e}"
+            lambda v: "" if round(v, 5) == 0 else f"{v:.0e}"
             )
 
         hm = sns.heatmap(
