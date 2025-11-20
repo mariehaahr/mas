@@ -112,7 +112,7 @@ def plot_valid_json_distribution(df, perc=True):
         if perc: 
             counts = model_res['valid_json_count'].value_counts(normalize=True).sort_index()
             counts_perc = counts * 100
-            sns.barplot(x=counts_perc, y=counts.values, ax=ax)
+            sns.barplot(x=counts.index, y=counts_perc, ax=ax)
             ax.set_ylabel('Percentage')
 
         else: 
@@ -133,6 +133,7 @@ def plot_input_r2():
     profiles_root = yaml.safe_load(pathlib.Path('configs/models.yaml').read_text())
     profiles = profiles_root.get('profiles', {})
     model_names = profiles.keys()
+    model_names.remove('llama-3.2-1b')
 
     dfs = [] 
     for model_n in model_names:
@@ -172,7 +173,14 @@ def plot_input_r2():
 
     ax.xaxis.set_label_position('top')
     ax.xaxis.tick_top()
-    ax.set_xticklabels(ax.get_xticklabels(), rotation = 45, ha='right')
+
+    plt.setp(
+        ax.get_xticklabels(),
+        rotation=45,
+        ha='right',
+        rotation_mode='anchor'
+    )
+    
     ax.set_yticklabels(ax.get_yticklabels(), rotation = 0)
 
     
