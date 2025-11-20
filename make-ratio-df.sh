@@ -12,5 +12,5 @@ echo "Host: $(hostname)"
 
 set -euo pipefail
 uv sync
-uv run src/ratio.py --round 1
-# uv run src/ratio.py --round 2
+# uv run src/ratio.py --round 1
+uv run src/ratio.py --round 2
