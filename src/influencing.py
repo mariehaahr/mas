@@ -26,6 +26,15 @@ model_names = list(data["profiles"].keys())
 # remove llama 1b from the models                                                                       #TODO: new
 model_names.remove("llama-3.2-1b")
 
+
+# lets sanity check the model
+print("***************************************************")
+print("sanity check")
+
+print("value counts: ")
+print(results.value_counts(["model_receiver", "model_sender"]))
+
+
 for influencer in model_names:
     # mask results where model_sender == influencer
     mask1 = results[results["model_sender"] == influencer]
@@ -45,6 +54,10 @@ for influencer in model_names:
             continue
         # doing the same as above, now just for this specific receiver
         mask2 = mask1[mask1["model_receiver"] == receiver]
+        if receiver == "qwen-2.5-1.5b":
+            print("printing the mask",mask2)
+            print("printing the unique values:")
+            print(mask1["model_receiver"].unique())
         if len(mask2) == 0:
             avg_flip = 0
         else:
@@ -53,6 +66,7 @@ for influencer in model_names:
         per_receiver[influencer][receiver].append(avg_flip)
         per_receiver[influencer][receiver].append(sum(mask2["flip"]))
         per_receiver[influencer][receiver].append(len(mask2))
+    
 
         # now dividing into up and down (aka 0->1 and 1->0)
         upmask = mask2[mask2["flip_direction"] == "up"]
@@ -74,7 +88,7 @@ for influencer in model_names:
         down[influencer][receiver].append(down_avg_flip)
         down[influencer][receiver].append(sum(downmask["flip"]))
         down[influencer][receiver].append(len(downmask))
-
+print("******************************************************\n")
 print("------------------------------- RESULTS ---------------------------")
 
 
