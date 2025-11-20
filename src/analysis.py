@@ -4,6 +4,8 @@ import seaborn as sns
 import numpy as np
 import pathlib, yaml
 import matplotlib as mpl
+from itertools import combinations
+import math
 
 # For displaying results in output file 
 pd.set_option('display.max_columns', None)
@@ -11,7 +13,7 @@ pd.set_option('display.max_rows', None)
 
 # Set theme across all plots 
 sns.set_theme(
-    style="whitegrid",
+    style="ticks",
     palette="Paired",     
     font_scale=1.2       
 )
@@ -133,8 +135,8 @@ def check_input_r2(df):
         p = f'input_{model_n}.csv'
         try:
             df = pd.read_csv(p, low_memory=False)
-            print(f'reading {p}')
-            print(df.columns)
+            # print(f'reading {p}')
+            # print(df.columns)
             dfs.append(df)
 
 
@@ -145,9 +147,117 @@ def check_input_r2(df):
 
     combined = pd.concat(dfs, ignore_index=True)
 
-    # We have the following columns model_receiver,id,valid_json_count_receiver,sarc_ratio_receiver,model_sender,valid_json_count_sender,sarc_ratio_sender,label_sender,explanation_sender,claim
+    heatmap_df = pd.crosstab(
+        combined['model_sender'],
+        combined['model_receiver']
+    )
 
-    # And we want to have a heatmap over the models, rows should be model_sender and columns should be model_receiver
+    print('\nSender x Receiver count matrix:')
+    print(heatmap_df)
+
+
+    plt.figure()
+
+    sns.heatmap(
+        heatmap_df,
+        cmap='Blues',
+        annot=True,
+        fmt="g"
+    )
+
+
+    plt.gca().xaxis.set_label_position('top')
+    plt.gca().xaxis.tick_top()
+    
+    plt.title('Count of (sender, receiver) pairs', pad=15)
+    plt.xlabel('Receiver')
+    plt.ylabel('Sender')
+
+    plt.tight_layout()
+    plt.savefig('plots/heatmap-input-second.png', dpi = 300, bbox_inches="tight")
+
+
+
+
+def plot_heatmaps_sarc_ratio(df):
+    df = df.copy()
+    df.dropna(inplace=True)
+    df['sarc_ratio_round'] = (df['sarc_ratio'] * 10).astype(int) / 10
+
+    pivot = df.pivot_table(
+    index='id',
+    columns='model',
+    values='sarc_ratio_round'
+    )
+
+    bins = [i/10 for i in range(11)]
+
+    heatmaps = {}
+    models = pivot.columns
+
+    for m1, m2 in combinations(models, 2):
+        
+        sub = pivot[[m1, m2]].dropna()
+
+        # get counts 
+        H = pd.crosstab(sub[m1], sub[m2])
+        
+        # make sure all ranges are present even though no occurences 
+        H = H.reindex(index=bins, columns=bins, fill_value=0)
+
+        total = H.to_numpy().sum()
+        if total > 0:
+            H_pct = H / total
+        else:
+            H_pct = H.astype(float) #all values zero
+
+        heatmaps[(m1, m2)] = H_pct
+
+
+    n = len(heatmaps)
+    n_cols = 3
+    n_rows = math.ceil(n / n_cols)
+
+    fig, axes = plt.subplots(n_rows, n_cols,
+                             figsize=(6 * n_cols, 6 * n_rows),
+                             squeeze=False)
+    
+    
+    for ax, ((m1, m2), H_pct) in zip(axes.flat, heatmaps.items()):
+        
+        annot_matrix = H_pct.copy().astype(object)
+        annot_matrix = annot_matrix.map(
+            lambda v: "" if round(v, 5) == 0 else f"{v:.1e}"
+            )
+
+        hm = sns.heatmap(
+            H_pct,
+            ax=ax,
+            annot=annot_matrix,
+            fmt='',
+            cmap='Blues',
+            vmin=0,
+            vmax=1,
+            cbar = True,
+            annot_kws={"fontsize":6},
+        )
+
+        ax.xaxis.tick_top()
+        ax.xaxis.set_label_position('top')
+        
+        ax.set_xlabel(m2)
+        ax.set_ylabel(m1)
+        
+    
+    for ax in axes.flat[len(heatmaps):]:
+        ax.set_visible(False)
+
+
+    fig.tight_layout()
+    plt.savefig('plots/heatmaps-first-results.png', dpi=300, bbox_inches="tight")
+
+
+
 
 def main():
     sarc_ratio_df = pd.read_csv('/home/rp-fril-mhpe/first-results-sarc-ratio.csv')
