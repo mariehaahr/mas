@@ -45,7 +45,7 @@ def main(args):
     else:
         # params we have specified
         decoding_cfg = {**decoding_cfg, **model_cfg['sampling']}
-        sampling = init_sampling_params(decoding_cfg, default = None) # var uden default før
+        sampling = init_sampling_params(decoding_cfg, default = None, Schema=SARCASTIC_SCHEMA_ROUND2)
     
     # print params to output
     print('###### SAMPLING PARAMS ######')

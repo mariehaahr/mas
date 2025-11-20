@@ -124,15 +124,39 @@ def plot_valid_json_distribution(df, perc=True):
     
 
 def check_input_r2(df):
-    pass 
+    profiles_root = yaml.safe_load(pathlib.Path('configs/models.yaml').read_text())
+    profiles = profiles_root.get('profiles', {})
+    model_names = profiles.keys()
+
+    dfs = [] 
+    for model_n in model_names:
+        p = f'input_{model_n}.csv'
+        try:
+            df = pd.read_csv(p, low_memory=False)
+            print(f'reading {p}')
+            print(df.columns)
+            dfs.append(df)
+
+
+        except FileNotFoundError:
+            print(f'File not found: {p}')
+        except Exception as e:
+            print(f'Error loading file: {p}, {e}')
+
+    combined = pd.concat(dfs, ignore_index=True)
+
+    # We have the following columns model_receiver,id,valid_json_count_receiver,sarc_ratio_receiver,model_sender,valid_json_count_sender,sarc_ratio_sender,label_sender,explanation_sender,claim
+
+    # And we want to have a heatmap over the models, rows should be model_sender and columns should be model_receiver
 
 def main():
-    sarc_ratio_df = pd.read_csv('/home/rp-fril-mhpe/results-sarc-ratio.csv')
+    sarc_ratio_df = pd.read_csv('/home/rp-fril-mhpe/first-results-sarc-ratio.csv')
 
     plot_sarc_distribution(sarc_ratio_df)
     plot_label_distribution(sarc_ratio_df)
     plot_valid_json_distribution(sarc_ratio_df)
 
+    
 
 if __name__ == '__main__':
     main()
