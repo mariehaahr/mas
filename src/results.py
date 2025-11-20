@@ -49,7 +49,7 @@ for receiver in model_names: # loop over all the models, as the receiver
     r1 = (
         lookup1[lookup1["model"] == receiver]
         .rename(columns={"sarc_ratio": "round1_sarc_ratio", "model": "model_receiver"})
-        [["id", "round1_sarc_ratio"]]       # drop valid_json_count from r1
+        [["id", "model_receiver", "round1_sarc_ratio"]]       # drop valid_json_count from r1
         .copy()
     )
 
