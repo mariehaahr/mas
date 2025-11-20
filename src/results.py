@@ -48,7 +48,7 @@ for receiver in model_names: # loop over all the models, as the receiver
     # filter out the reciever in the lookuptable from round 1
     r1 = (
         lookup1[lookup1["model"] == receiver]
-        .rename(columns={"sarc_ratio": "round1_sarc_ratio"})
+        .rename(columns={"sarc_ratio": "round1_sarc_ratio", "model": "model_receiver"})
         [["id", "round1_sarc_ratio"]]       # drop valid_json_count from r1
         .copy()
     )
@@ -65,7 +65,7 @@ for receiver in model_names: # loop over all the models, as the receiver
     )
 
     # merge on id
-    merged = r2.merge(r1, on="id", how="left")
+    merged = r2.merge(r1, on=["id", "model_receiver"], how="left")
 
     # calculate delta
     merged["delta_sarc"] = merged["round2_sarc_ratio"] - merged["round1_sarc_ratio"]
