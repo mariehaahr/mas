@@ -15,6 +15,13 @@ lookup_r2_path = Path("/home/rp-fril-mhpe/second-results-sarc-ratio.csv").expand
 lookup1 = pd.read_csv(lookup_r1_path) 
 lookup2 = pd.read_csv(lookup_r2_path) 
 
+print("sanity_check")
+print("lookup 1: \n",lookup1["model"].value_counts())
+
+
+print("lookup2: \n",lookup2[["model_sender", "model_receiver"]].value_counts())
+print("---------------------")
+
 # load model names
 with open("configs/models.yaml", "r") as f:
     data = yaml.safe_load(f)
@@ -79,6 +86,8 @@ for receiver in model_names: # loop over all the models, as the receiver
     merged["flip"] = (merged["flip_direction"] != "none").astype(int)
 
     all_results.append(merged)
+
+    
 
 all_results_df = pd.concat(all_results, ignore_index=True)
 all_results_df.to_csv(outpath, index=False)
