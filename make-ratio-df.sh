@@ -4,8 +4,8 @@
 #SBATCH --cpus-per-task=2
 #SBATCH --mem=32G
 #SBATCH --time=00:20:00
-#SBATCH --output=logs/ratio2/%x.%j.out
-#SBATCH --error=logs/ratio2/%x.%j.err
+#SBATCH --output=logs/qwen1.5/%x.%j.out
+#SBATCH --error=logs/qwen1.5/%x.%j.err
 
 
 echo "Host: $(hostname)"
