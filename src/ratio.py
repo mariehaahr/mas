@@ -47,6 +47,8 @@ def make_ratio(round_num: int):
     print(combined.columns)
     print(f'round {round_num}')
     # group by cols
+
+
     aggregated = (
     combined.groupby(group_cols, as_index=False)
     .agg(
@@ -56,9 +58,24 @@ def make_ratio(round_num: int):
     )
     
     aggregated['sarc_ratio'] = aggregated['sarc_count'] / aggregated['valid_json_count'].replace({0: pd.NA})
+    
+
+    if round_num == 2:
+        aggregated['model_receiver'].value_counts()
+
+        aggregated['model_sender'].value_counts()
+        aggregated[['model_sender','model_receiver']].value_counts()
+
+
+
 
     aggregated.drop('sarc_count', inplace=True, axis = 1)
-
+    print('model rec')
+    print(aggregated['model_reciver'].value_counts())
+    print('model sender')
+    print(aggregated['model_sender'].value_counts())
+    print(aggregated[['model_receiver','model_sender']].value_counts())
+    
     out_path = f'/home/rp-fril-mhpe/{save_as}'
     # save 
     aggregated.to_csv(out_path, index=False)
