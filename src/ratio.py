@@ -41,6 +41,7 @@ def make_ratio(round_num: int):
         save_as = 'first-results-sarc-ratio.csv'
 
     else:
+        print('we are in round 2')
         group_cols = ['model_sender', 'id', 'model_receiver']
         label_col = 'label_receiver_new'
         save_as = 'second-results-sarc-ratio.csv'
@@ -61,21 +62,15 @@ def make_ratio(round_num: int):
     
 
     if round_num == 2:
-        aggregated['model_receiver'].value_counts()
-
-        aggregated['model_sender'].value_counts()
-        aggregated[['model_sender','model_receiver']].value_counts()
-
-
+        print('model rec')
+        print(aggregated['model_receiver'].value_counts())
+        print('model sender')
+        print(aggregated['model_sender'].value_counts())
+        print(aggregated[['model_receiver','model_sender']].value_counts())
 
 
     aggregated.drop('sarc_count', inplace=True, axis = 1)
-    print('model rec')
-    print(aggregated['model_reciver'].value_counts())
-    print('model sender')
-    print(aggregated['model_sender'].value_counts())
-    print(aggregated[['model_receiver','model_sender']].value_counts())
-    
+ 
     out_path = f'/home/rp-fril-mhpe/{save_as}'
     # save 
     aggregated.to_csv(out_path, index=False)
