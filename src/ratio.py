@@ -10,7 +10,8 @@ def make_ratio(round_num: int):
 
     profiles_root = yaml.safe_load(pathlib.Path('configs/models.yaml').read_text())
     profiles = profiles_root.get('profiles', {})
-    model_names = profiles.keys()
+    model_names = list(profiles.keys())
+    model_names.remove('llama-3.2-1b')
 
     dfs = []
     # read in all results
@@ -42,9 +43,10 @@ def make_ratio(round_num: int):
 
     else:
         print('we are in round 2')
-        group_cols = ['model_sender', 'id', 'model_receiver']
+        group_cols = ['model_sender', 'model_receiver', 'id']
         label_col = 'label_receiver_new'
         save_as = 'second-results-sarc-ratio.csv'
+    
     print(combined.columns)
     print(f'round {round_num}')
     # group by cols
