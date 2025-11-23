@@ -74,7 +74,7 @@ for influencer in model_names:
         if len(upmask) == 0:
             up_avg_flip = 0
         else:
-            up_avg_flip = sum(upmask["flip"]) / len(upmask)
+            up_avg_flip = sum(upmask["flip"]) / len(mask2)
         
         up[influencer][receiver].append(up_avg_flip)
         up[influencer][receiver].append(sum(upmask["flip"]))
@@ -83,7 +83,7 @@ for influencer in model_names:
         if len(downmask) == 0:
             down_avg_flip = 0
         else:
-            down_avg_flip = sum(downmask["flip"]) / len(downmask)
+            down_avg_flip = sum(downmask["flip"]) / len(mask2)
         
         down[influencer][receiver].append(down_avg_flip)
         down[influencer][receiver].append(sum(downmask["flip"]))
