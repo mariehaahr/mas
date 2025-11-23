@@ -73,7 +73,11 @@ for influencer in model_names:
         downmask = mask2[mask2["flip_direction"] == "down"]
 
         upandnone = mask2[mask2["round1_sarc_ratio"] >= 0.5]
+        print(upandnone)
+        print(upandnone.shape)
         downandnone = mask2[mask2["round1_sarc_ratio"] <= 0.5]
+        print(downandnone)
+        print(downandnone.shape)
 
         if len(upmask) == 0:
             up_avg_flip = 0
