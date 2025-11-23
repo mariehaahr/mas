@@ -143,10 +143,10 @@ print(f"\n\n\ndf down:")
 print(df_down)
 
 # save to csv
-df_total.to_csv(Path((f"/home/rp-fril-mhpe/total_results.csv")))
-df_per_receiver.to_csv(Path((f"/home/rp-fril-mhpe/per_receiver_results.csv")))
-df_up.to_csv(Path((f"/home/rp-fril-mhpe/up_results.csv")))
-df_down.to_csv(Path((f"/home/rp-fril-mhpe/down_results.csv")))
+df_total.to_csv(Path((f"/home/rp-fril-mhpe/total_results.csv")), index=False)
+df_per_receiver.to_csv(Path((f"/home/rp-fril-mhpe/per_receiver_results.csv")), index=False)
+df_up.to_csv(Path((f"/home/rp-fril-mhpe/up_results.csv")), index=False)
+df_down.to_csv(Path((f"/home/rp-fril-mhpe/down_results.csv")), index=False)
 
 # printing the results
 print("******************************************************\n")
