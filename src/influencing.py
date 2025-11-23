@@ -97,6 +97,57 @@ for influencer in model_names:
         down[influencer][receiver].append(sum(downmask["flip"]))
         down[influencer][receiver].append(len(downandnone))
 
+# saving the results
+
+# turning the dicts into dataframes
+df_total = (
+    pd.DataFrame.from_dict(total, orient="index", 
+                           columns=["fliprate", "flip_count", "total_count"])
+      .reset_index()
+      .rename(columns={"index": "model_sender"})
+)
+print(f"\n\n\ndf total:")
+print(df_total)
+# also the dict(dict(list))
+rows = []
+
+for sender, receivers in per_receiver.items():
+    for receiver, values in receivers.items():
+        rows.append([sender, receiver] + values)
+
+df_per_receiver = pd.DataFrame(rows, columns=["model_sender", "model_receiver", "fliprate", "flip_count", "total_count"])
+
+rows = []
+
+print(f"\n\n\ndf per receiver:")
+print(df_per_receiver)
+
+for sender, receivers in up.items():
+    for receiver, values in receivers.items():
+        rows.append([sender, receiver] + values)
+
+df_up = pd.DataFrame(rows, columns=["model_sender", "model_receiver", "fliprate", "flip_count", "total_count"])
+
+print(f"\n\n\ndf up:")
+print(df_up)
+rows = []
+
+
+
+for sender, receivers in down.items():
+    for receiver, values in receivers.items():
+        rows.append([sender, receiver] + values)
+
+df_down = pd.DataFrame(rows, columns=["model_sender", "model_receiver", "fliprate", "flip_count", "total_count"])
+print(f"\n\n\ndf down:")
+print(df_down)
+
+df_total.to_csv(Path((f"/home/rp-fril-mhpe/total_results.csv")))
+df_per_receiver.to_csv(Path((f"/home/rp-fril-mhpe/per_receiver_results.csv")))
+df_up = Path((f"/home/rp-fril-mhpe/up_results.csv"))
+df_down = Path((f"/home/rp-fril-mhpe/down_results.csv"))
+
+# printing the results
 print("******************************************************\n")
 print("------------------------------- RESULTS ---------------------------")
 
