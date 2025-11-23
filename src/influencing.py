@@ -142,10 +142,11 @@ df_down = pd.DataFrame(rows, columns=["model_sender", "model_receiver", "fliprat
 print(f"\n\n\ndf down:")
 print(df_down)
 
+# save to csv
 df_total.to_csv(Path((f"/home/rp-fril-mhpe/total_results.csv")))
 df_per_receiver.to_csv(Path((f"/home/rp-fril-mhpe/per_receiver_results.csv")))
-df_up = Path((f"/home/rp-fril-mhpe/up_results.csv"))
-df_down = Path((f"/home/rp-fril-mhpe/down_results.csv"))
+df_up.to_csv(Path((f"/home/rp-fril-mhpe/up_results.csv")))
+df_down.to_csv(Path((f"/home/rp-fril-mhpe/down_results.csv")))
 
 # printing the results
 print("******************************************************\n")
