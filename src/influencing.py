@@ -72,10 +72,10 @@ for influencer in model_names:
         upmask = mask2[mask2["flip_direction"] == "up"]
         downmask = mask2[mask2["flip_direction"] == "down"]
 
-        upandnone = mask2[mask2["round1_sarc_ratio"] >= 0.5]
+        upandnone = mask2[mask2["round1_sarc_ratio"] < 0.5]
         # print(upandnone)
         # print(upandnone.shape)
-        downandnone = mask2[mask2["round1_sarc_ratio"] <= 0.5]
+        downandnone = mask2[mask2["round1_sarc_ratio"] >= 0.5]
         # print(downandnone)
         # print(downandnone.shape)
 
@@ -96,7 +96,7 @@ for influencer in model_names:
         down[influencer][receiver].append(down_avg_flip)
         down[influencer][receiver].append(sum(downmask["flip"]))
         down[influencer][receiver].append(len(downandnone))
-        
+
 print("******************************************************\n")
 print("------------------------------- RESULTS ---------------------------")
 
