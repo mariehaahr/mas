@@ -83,21 +83,20 @@ for influencer in model_names:
             up_avg_flip = 0
         else:
             up_avg_flip = sum(upmask["flip"]) / len(upandnone)
-            print(f"UP: before we divided by {len(mask2)} but now we divide by {len(upandnone)}")
         
         up[influencer][receiver].append(up_avg_flip)
         up[influencer][receiver].append(sum(upmask["flip"]))
-        up[influencer][receiver].append(len(upmask))
+        up[influencer][receiver].append(len(upandnone))
         
         if len(downandnone) == 0:
             down_avg_flip = 0
         else:
             down_avg_flip = sum(downmask["flip"]) / len(downandnone)
-            print(f"DOWN: before we divided by {len(mask2)} but now we divide by {len(downandnone)}")
         
         down[influencer][receiver].append(down_avg_flip)
         down[influencer][receiver].append(sum(downmask["flip"]))
-        down[influencer][receiver].append(len(downmask))
+        down[influencer][receiver].append(len(downandnone))
+        
 print("******************************************************\n")
 print("------------------------------- RESULTS ---------------------------")
 
