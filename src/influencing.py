@@ -71,10 +71,15 @@ for influencer in model_names:
         # now dividing into up and down (aka 0->1 and 1->0)
         upmask = mask2[mask2["flip_direction"] == "up"]
         downmask = mask2[mask2["flip_direction"] == "down"]
+
+        upandnone = mask2[mask2["round1_sarc_ratio"] >= 0.5]
+        downandnone = mask2[mask2["round1_sarc_ratio"] <= 0.5]
+
         if len(upmask) == 0:
             up_avg_flip = 0
         else:
-            up_avg_flip = sum(upmask["flip"]) / len(mask2)
+            up_avg_flip = sum(upmask["flip"]) / len(upandnone)
+            print(f"UP: before we divided by {len(mask2)} but now we divide by {len(upandnone)}")
         
         up[influencer][receiver].append(up_avg_flip)
         up[influencer][receiver].append(sum(upmask["flip"]))
@@ -83,7 +88,8 @@ for influencer in model_names:
         if len(downmask) == 0:
             down_avg_flip = 0
         else:
-            down_avg_flip = sum(downmask["flip"]) / len(mask2)
+            down_avg_flip = sum(downmask["flip"]) / len(downandnone)
+            print(f"DOWN: before we divided by {len(mask2)} but now we divide by {len(downandnone)}")
         
         down[influencer][receiver].append(down_avg_flip)
         down[influencer][receiver].append(sum(downmask["flip"]))
