@@ -28,11 +28,11 @@ model_names.remove("llama-3.2-1b")
 
 
 # lets sanity check the model
-print("***************************************************")
-print("sanity check")
+# print("***************************************************")
+# print("sanity check")
 
-print("value counts: ")
-print(results.value_counts(["model_receiver", "model_sender"]))
+# print("value counts: ")
+# print(results.value_counts(["model_receiver", "model_sender"]))
 
 
 for influencer in model_names:
@@ -73,13 +73,13 @@ for influencer in model_names:
         downmask = mask2[mask2["flip_direction"] == "down"]
 
         upandnone = mask2[mask2["round1_sarc_ratio"] >= 0.5]
-        print(upandnone)
-        print(upandnone.shape)
+        # print(upandnone)
+        # print(upandnone.shape)
         downandnone = mask2[mask2["round1_sarc_ratio"] <= 0.5]
-        print(downandnone)
-        print(downandnone.shape)
+        # print(downandnone)
+        # print(downandnone.shape)
 
-        if len(upmask) == 0:
+        if len(upandnone) == 0:
             up_avg_flip = 0
         else:
             up_avg_flip = sum(upmask["flip"]) / len(upandnone)
@@ -89,7 +89,7 @@ for influencer in model_names:
         up[influencer][receiver].append(sum(upmask["flip"]))
         up[influencer][receiver].append(len(upmask))
         
-        if len(downmask) == 0:
+        if len(downandnone) == 0:
             down_avg_flip = 0
         else:
             down_avg_flip = sum(downmask["flip"]) / len(downandnone)
