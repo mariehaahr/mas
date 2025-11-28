@@ -28,11 +28,11 @@ model_names.remove("llama-3.2-1b")
 
 
 # lets sanity check the model
-print("***************************************************")
-print("sanity check")
+# print("***************************************************")
+# print("sanity check")
 
-print("value counts: ")
-print(results.value_counts(["model_receiver", "model_sender"]))
+# print("value counts: ")
+# print(results.value_counts(["model_receiver", "model_sender"]))
 
 
 for influencer in model_names:
@@ -71,23 +71,84 @@ for influencer in model_names:
         # now dividing into up and down (aka 0->1 and 1->0)
         upmask = mask2[mask2["flip_direction"] == "up"]
         downmask = mask2[mask2["flip_direction"] == "down"]
-        if len(upmask) == 0:
+
+        upandnone = mask2[mask2["round1_sarc_ratio"] < 0.5]
+        # print(upandnone)
+        # print(upandnone.shape)
+        downandnone = mask2[mask2["round1_sarc_ratio"] >= 0.5]
+        # print(downandnone)
+        # print(downandnone.shape)
+
+        if len(upandnone) == 0:
             up_avg_flip = 0
         else:
-            up_avg_flip = sum(upmask["flip"]) / len(upmask)
+            up_avg_flip = sum(upmask["flip"]) / len(upandnone)
         
         up[influencer][receiver].append(up_avg_flip)
         up[influencer][receiver].append(sum(upmask["flip"]))
-        up[influencer][receiver].append(len(upmask))
+        up[influencer][receiver].append(len(upandnone))
         
-        if len(downmask) == 0:
+        if len(downandnone) == 0:
             down_avg_flip = 0
         else:
-            down_avg_flip = sum(downmask["flip"]) / len(downmask)
+            down_avg_flip = sum(downmask["flip"]) / len(downandnone)
         
         down[influencer][receiver].append(down_avg_flip)
         down[influencer][receiver].append(sum(downmask["flip"]))
-        down[influencer][receiver].append(len(downmask))
+        down[influencer][receiver].append(len(downandnone))
+
+# saving the results
+
+# turning the dicts into dataframes
+df_total = (
+    pd.DataFrame.from_dict(total, orient="index", 
+                           columns=["fliprate", "flip_count", "total_count"])
+      .reset_index()
+      .rename(columns={"index": "model_sender"})
+)
+print(f"\n\n\ndf total:")
+print(df_total)
+# also the dict(dict(list))
+rows = []
+
+for sender, receivers in per_receiver.items():
+    for receiver, values in receivers.items():
+        rows.append([sender, receiver] + values)
+
+df_per_receiver = pd.DataFrame(rows, columns=["model_sender", "model_receiver", "fliprate", "flip_count", "total_count"])
+
+rows = []
+
+print(f"\n\n\ndf per receiver:")
+print(df_per_receiver)
+
+for sender, receivers in up.items():
+    for receiver, values in receivers.items():
+        rows.append([sender, receiver] + values)
+
+df_up = pd.DataFrame(rows, columns=["model_sender", "model_receiver", "fliprate", "flip_count", "total_count"])
+
+print(f"\n\n\ndf up:")
+print(df_up)
+rows = []
+
+
+
+for sender, receivers in down.items():
+    for receiver, values in receivers.items():
+        rows.append([sender, receiver] + values)
+
+df_down = pd.DataFrame(rows, columns=["model_sender", "model_receiver", "fliprate", "flip_count", "total_count"])
+print(f"\n\n\ndf down:")
+print(df_down)
+
+# save to csv
+df_total.to_csv(Path((f"/home/rp-fril-mhpe/total_results.csv")), index=False)
+df_per_receiver.to_csv(Path((f"/home/rp-fril-mhpe/per_receiver_results.csv")), index=False)
+df_up.to_csv(Path((f"/home/rp-fril-mhpe/up_results.csv")), index=False)
+df_down.to_csv(Path((f"/home/rp-fril-mhpe/down_results.csv")), index=False)
+
+# printing the results
 print("******************************************************\n")
 print("------------------------------- RESULTS ---------------------------")
 
