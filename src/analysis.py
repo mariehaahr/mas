@@ -33,6 +33,33 @@ mpl.rcParams.update({
 })
 
 
+def prepare_heatmap_df():
+    profiles_root = yaml.safe_load(pathlib.Path('configs/models.yaml').read_text())
+    profiles = profiles_root.get('profiles', {})
+    model_names = list(profiles.keys())
+    model_names.remove('llama-3.2-1b')
+
+    dfs = [] 
+    for model_n in model_names:
+        p = f'/home/rp-fril-mhpe/input_{model_n}.csv'
+        try:
+            df = pd.read_csv(p, low_memory=False)
+            dfs.append(df)
+
+
+        except FileNotFoundError:
+            print(f'File not found: {p}')
+        except Exception as e:
+            print(f'Error loading file: {p}, {e}')
+
+    combined = pd.concat(dfs, ignore_index=True)
+
+    heatmap_df = (combined.groupby(['model_sender', 'model_receiver'])['id'].nunique().unstack(fill_value=0))
+
+    heatmap_df.to_csv('/home/fril/mas/results/input-r1-claim-count.csv', index= False)
+    print(f'Saved df with {heatmap_df.shape[0]} rows.')
+
+
 def plot_sarc_distribution(df, kde = True):
     '''
     Plotting the sarcasm ratio distribution of results in round 1. 
@@ -276,12 +303,13 @@ def plot_heatmaps_sarc_ratio(df):
 def main():
     sarc_ratio_df = pd.read_csv('/home/rp-fril-mhpe/first-results-sarc-ratio.csv')
 
-    plot_sarc_distribution(sarc_ratio_df)
-    plot_label_distribution(sarc_ratio_df)
-    plot_valid_json_distribution(sarc_ratio_df)
-    plot_heatmaps_sarc_ratio(sarc_ratio_df)
-    plot_input_r2()
+    # plot_sarc_distribution(sarc_ratio_df)
+    # plot_label_distribution(sarc_ratio_df)
+    # plot_valid_json_distribution(sarc_ratio_df)
+    # plot_heatmaps_sarc_ratio(sarc_ratio_df)
+    # plot_input_r2()
     
+    prepare_heatmap_df()
 
 if __name__ == '__main__':
     main()
