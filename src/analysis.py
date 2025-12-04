@@ -45,8 +45,6 @@ def prepare_heatmap_df():
         try:
             df = pd.read_csv(p, low_memory=False)
             dfs.append(df)
-
-
         except FileNotFoundError:
             print(f'File not found: {p}')
         except Exception as e:
@@ -54,9 +52,11 @@ def prepare_heatmap_df():
 
     combined = pd.concat(dfs, ignore_index=True)
 
-    heatmap_df = (combined.groupby(['model_sender', 'model_receiver'])['id'].nunique().unstack(fill_value=0))
+    heatmap_df = (combined.groupby(['model_sender', 'model_receiver', 'label_sender'])['id']
+                  .nunique()
+                  .reset_index(name='n_unique_claims'))
 
-    heatmap_df.to_csv('/home/fril/mas/results/input-r1-claim-count.csv', index= False)
+    heatmap_df.to_csv('/home/fril/mas/results/input-r2-claim-count.csv', index= False)
     print(f'Saved df with {heatmap_df.shape[0]} rows.')
 
 
