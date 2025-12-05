@@ -44,6 +44,7 @@ def prepare_heatmap_df():
         p = f'/home/rp-fril-mhpe/input_{model_n}.csv'
         try:
             df = pd.read_csv(p, low_memory=False)
+
             dfs.append(df)
         except FileNotFoundError:
             print(f'File not found: {p}')
@@ -52,6 +53,7 @@ def prepare_heatmap_df():
 
     combined = pd.concat(dfs, ignore_index=True)
 
+    print(combined[['model_sender', 'model_receiver']].value_counts())
 
     combined['label_receiver_agg'] = df['sarc_ratio_receiver'].apply(
             lambda x: 'sarcastic' if x >= 0.5 else 'literal'
