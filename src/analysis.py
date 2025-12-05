@@ -56,7 +56,7 @@ def prepare_heatmap_df():
     print(combined[['model_sender', 'model_receiver']].value_counts().reset_index())
 
    
-    combined['label_receiver_agg'] = df['sarc_ratio_receiver'].apply(
+    combined['label_receiver_agg'] = combined['sarc_ratio_receiver'].apply(
             lambda x: 'sarcastic' if x >= 0.5 else 'literal'
              ) 
     
@@ -82,7 +82,7 @@ def prepare_heatmap_df():
         )
    
     print(f'df2:{heatmap_df_2}')
-    
+
     heatmap_df = (
     combined
     .groupby(['model_sender', 'model_receiver', 'label_receiver_agg'])['id']
