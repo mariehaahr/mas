@@ -53,7 +53,7 @@ def prepare_heatmap_df():
     combined = pd.concat(dfs, ignore_index=True)
 
 
-    combined['label_sender_agg'] = df['sarc_ratio_receiver'].apply(
+    combined['label_receiver_agg'] = df['sarc_ratio_receiver'].apply(
             lambda x: 'sarcastic' if x >= 0.5 else 'literal'
              )
     heatmap_df = (
