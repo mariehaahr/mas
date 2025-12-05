@@ -51,8 +51,10 @@ def prepare_heatmap_df():
             print(f'Error loading file: {p}, {e}')
 
     combined = pd.concat(dfs, ignore_index=True)
-
-    heatmap_df = (combined.groupby(['model_sender', 'model_receiver', 'label_sender'])['id']
+    combined['label_sender_agg'] = df['sarc_ratio_sender'].apply(
+            lambda x: 'sarcastic' if x >= 0.5 else 'literal'
+             )
+    heatmap_df = (combined.groupby(['model_sender', 'model_receiver', 'label_sender_agg'])['id']
                   .nunique()
                   .reset_index(name='n_unique_claims'))
 
