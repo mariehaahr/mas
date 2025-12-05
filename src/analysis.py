@@ -54,10 +54,12 @@ def prepare_heatmap_df():
     combined['label_sender_agg'] = df['sarc_ratio_sender'].apply(
             lambda x: 'sarcastic' if x >= 0.5 else 'literal'
              )
-    heatmap_df = (combined.groupby(['model_sender', 'model_receiver', 'label_sender_agg'])['id']
-                  .nunique()
-                  .reset_index(name='n_unique_claims'))
-
+    heatmap_df = (
+    combined
+    .groupby(['model_sender', 'model_receiver', 'label_sender_agg', 'id'])
+    .size()
+    .reset_index(name='count')
+    )
     heatmap_df.to_csv('/home/fril/mas/results/input-r2-claim-count.csv', index= False)
     print(f'Saved df with {heatmap_df.shape[0]} rows.')
 
