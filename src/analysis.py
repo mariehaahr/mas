@@ -70,12 +70,12 @@ def prepare_heatmap_df():
     # Step 3: build a complete index of all combinations
     full_index = pd.MultiIndex.from_product(
         [senders, receivers, labels],
-        names=["model_sender", "model_receiver", "label_sender_agg"]
+        names=["model_sender", "model_receiver", "label_receiver_agg"]
     )
 
     heatmap_df_2 = (
         combined
-        .groupby(["model_sender", "model_receiver", "label_sender_agg"])["id"]
+        .groupby(["model_sender", "model_receiver", "label_receiver_agg"])["id"]
         .nunique()
         .reindex(full_index, fill_value=0)   # <–– fill missing combinations with 0
         .reset_index(name="n_unique_claims")
