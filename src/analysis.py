@@ -51,18 +51,19 @@ def prepare_heatmap_df():
             print(f'Error loading file: {p}, {e}')
 
     combined = pd.concat(dfs, ignore_index=True)
-    combined['label_sender_agg'] = df['sarc_ratio_sender'].apply(
+
+
+    combined['label_sender_agg'] = df['sarc_ratio_receiver'].apply(
             lambda x: 'sarcastic' if x >= 0.5 else 'literal'
              )
     heatmap_df = (
     combined
-    .groupby(['model_sender', 'model_receiver', 'label_sender_agg', 'id'])
+    .groupby(['model_sender', 'model_receiver', 'label_receiver_agg', 'id'])
     .size()
     .reset_index(name='count')
     )
     heatmap_df.to_csv('/home/fril/mas/results/input-r2-claim-count.csv', index= False)
     print(f'Saved df with {heatmap_df.shape[0]} rows.')
-
 
 def plot_sarc_distribution(df, kde = True):
     '''
