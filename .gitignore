@@ -17,3 +17,4 @@ pyproject.tomlresults/*.csv
 results-raw/
 results_extra/
 results_small/
+input_mistral-0.3-7b.csv
