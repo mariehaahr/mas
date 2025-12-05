@@ -1,0 +1,9 @@
+Traceback (most recent call last):
+  File "/home/fril/mas/src/analysis.py", line 322, in <module>
+    main()
+  File "/home/fril/mas/src/analysis.py", line 319, in main
+    prepare_heatmap_df()
+  File "/home/fril/mas/src/analysis.py", line 56, in prepare_heatmap_df
+    print(combined[['model_sender', 'model_receiver']].value_counts()).reset_index()
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'NoneType' object has no attribute 'reset_index'

@@ -3,8 +3,8 @@
 #SBATCH --partition=scavenge
 #SBATCH --cpus-per-task=1
 #SBATCH --time=00:20:00
-#SBATCH --output=logs/%x.%j.out
-#SBATCH --error=logs/%x.%j.err
+#SBATCH --output=%x.%j.out
+#SBATCH --error=%x.%j.err
 
 echo "Host: $(hostname)"
 
