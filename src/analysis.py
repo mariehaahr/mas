@@ -53,42 +53,36 @@ def prepare_heatmap_df():
 
     combined = pd.concat(dfs, ignore_index=True)
    
-    print(combined[['model_sender', 'model_receiver']].value_counts().reset_index())
-
+    # print(combined[['model_sender', 'model_receiver']].value_counts().reset_index())
    
     combined['label_receiver_agg'] = combined['sarc_ratio_receiver'].apply(
             lambda x: 'sarcastic' if x >= 0.5 else 'literal'
              ) 
-    
-    # Step 1: define all label categories
+
     labels = ["literal", "sarcastic"]
 
-    # Step 2: compute unique values for sender & receiver
     senders = combined["model_sender"].unique()
     receivers = combined["model_receiver"].unique()
 
-    # Step 3: build a complete index of all combinations
     full_index = pd.MultiIndex.from_product(
         [senders, receivers, labels],
         names=["model_sender", "model_receiver", "label_receiver_agg"]
     )
 
-    heatmap_df_2 = (
+    heatmap_df = (
         combined
         .groupby(["model_sender", "model_receiver", "label_receiver_agg"])["id"]
         .nunique()
-        .reindex(full_index, fill_value=0)   # <–– fill missing combinations with 0
+        .reindex(full_index, fill_value=0)
         .reset_index(name="n_unique_claims")
         )
    
-    print(f'df2:{heatmap_df_2}')
-
-    heatmap_df = (
-    combined
-    .groupby(['model_sender', 'model_receiver', 'label_receiver_agg'])['id']
-    .nunique()
-    .reset_index(name='n_unique_claims')
-    )
+    # heatmap_df = (
+    # combined
+    # .groupby(['model_sender', 'model_receiver', 'label_receiver_agg'])['id']
+    # .nunique()
+    # .reset_index(name='n_unique_claims')
+    # )
     heatmap_df.to_csv('/home/fril/mas/results/input-r2-claim-count.csv', index= False)
     print(f'Saved df with {heatmap_df.shape[0]} rows.')
 
