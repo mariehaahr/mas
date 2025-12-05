@@ -52,6 +52,14 @@ def prepare_heatmap_df():
             print(f'Error loading file: {p}, {e}')
 
     combined = pd.concat(dfs, ignore_index=True)
+   
+    print(combined[['model_sender', 'model_receiver']].value_counts().reset_index())
+
+   
+    combined['label_receiver_agg'] = df['sarc_ratio_receiver'].apply(
+            lambda x: 'sarcastic' if x >= 0.5 else 'literal'
+             ) 
+    
     # Step 1: define all label categories
     labels = ["literal", "sarcastic"]
 
@@ -65,7 +73,6 @@ def prepare_heatmap_df():
         names=["model_sender", "model_receiver", "label_sender_agg"]
     )
 
-# Step 4: group your data
     heatmap_df_2 = (
         combined
         .groupby(["model_sender", "model_receiver", "label_sender_agg"])["id"]
@@ -73,11 +80,8 @@ def prepare_heatmap_df():
         .reindex(full_index, fill_value=0)   # <–– fill missing combinations with 0
         .reset_index(name="n_unique_claims")
         )
-    print(combined[['model_sender', 'model_receiver']].value_counts().reset_index())
+   
     print(f'df2:{heatmap_df_2}')
-    combined['label_receiver_agg'] = df['sarc_ratio_receiver'].apply(
-            lambda x: 'sarcastic' if x >= 0.5 else 'literal'
-             ) 
     
     heatmap_df = (
     combined
