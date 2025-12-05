@@ -1,0 +1,74 @@
+Host: desktop12.hpc.itu.dk
+      model_sender  model_receiver   count
+0    qwen-2.5-1.5b  mistral-0.3-7b  832729
+1   mistral-0.3-7b   qwen-2.5-1.5b  831173
+2      qwen-2.5-7b   qwen-2.5-1.5b  774726
+3    qwen-2.5-1.5b     qwen-2.5-7b  774701
+4    qwen-2.5-1.5b    llama-3.2-3b  757888
+5     llama-3.2-3b   qwen-2.5-1.5b  757671
+6    qwen-2.5-1.5b  mistral-0.2-7b  697186
+7   mistral-0.2-7b   qwen-2.5-1.5b  692104
+8   mistral-0.2-7b  mistral-0.3-7b  136584
+9   mistral-0.3-7b  mistral-0.2-7b  136494
+10     qwen-2.5-7b  mistral-0.2-7b  120413
+11  mistral-0.2-7b     qwen-2.5-7b  120150
+12    llama-3.2-3b  mistral-0.2-7b  104396
+13  mistral-0.2-7b    llama-3.2-3b  104291
+14     qwen-2.5-7b  mistral-0.3-7b   55290
+15  mistral-0.3-7b     qwen-2.5-7b   55195
+16     qwen-2.5-7b    llama-3.2-3b   52939
+17    llama-3.2-3b     qwen-2.5-7b   52917
+18    llama-3.2-3b  mistral-0.3-7b   24477
+19  mistral-0.3-7b    llama-3.2-3b   24453
+df2:      model_sender  model_receiver label_receiver_agg  n_unique_claims
+0      qwen-2.5-7b    llama-3.2-3b            literal             1586
+1      qwen-2.5-7b    llama-3.2-3b          sarcastic             3708
+2      qwen-2.5-7b     qwen-2.5-7b            literal                0
+3      qwen-2.5-7b     qwen-2.5-7b          sarcastic                0
+4      qwen-2.5-7b   qwen-2.5-1.5b            literal            77398
+5      qwen-2.5-7b   qwen-2.5-1.5b          sarcastic               80
+6      qwen-2.5-7b  mistral-0.3-7b            literal               97
+7      qwen-2.5-7b  mistral-0.3-7b          sarcastic             5432
+8      qwen-2.5-7b  mistral-0.2-7b            literal            10005
+9      qwen-2.5-7b  mistral-0.2-7b          sarcastic             2037
+10   qwen-2.5-1.5b    llama-3.2-3b            literal                0
+11   qwen-2.5-1.5b    llama-3.2-3b          sarcastic            75796
+12   qwen-2.5-1.5b     qwen-2.5-7b            literal               80
+13   qwen-2.5-1.5b     qwen-2.5-7b          sarcastic            77398
+14   qwen-2.5-1.5b   qwen-2.5-1.5b            literal                0
+15   qwen-2.5-1.5b   qwen-2.5-1.5b          sarcastic                0
+16   qwen-2.5-1.5b  mistral-0.3-7b            literal                0
+17   qwen-2.5-1.5b  mistral-0.3-7b          sarcastic            83281
+18   qwen-2.5-1.5b  mistral-0.2-7b            literal              127
+19   qwen-2.5-1.5b  mistral-0.2-7b          sarcastic            69598
+20  mistral-0.3-7b    llama-3.2-3b            literal             2365
+21  mistral-0.3-7b    llama-3.2-3b          sarcastic               83
+22  mistral-0.3-7b     qwen-2.5-7b            literal             5432
+23  mistral-0.3-7b     qwen-2.5-7b          sarcastic               97
+24  mistral-0.3-7b   qwen-2.5-1.5b            literal            83281
+25  mistral-0.3-7b   qwen-2.5-1.5b          sarcastic                0
+26  mistral-0.3-7b  mistral-0.3-7b            literal                0
+27  mistral-0.3-7b  mistral-0.3-7b          sarcastic                0
+28  mistral-0.3-7b  mistral-0.2-7b            literal            13664
+29  mistral-0.3-7b  mistral-0.2-7b          sarcastic                5
+30  mistral-0.2-7b    llama-3.2-3b            literal              758
+31  mistral-0.2-7b    llama-3.2-3b          sarcastic             9687
+32  mistral-0.2-7b     qwen-2.5-7b            literal             2037
+33  mistral-0.2-7b     qwen-2.5-7b          sarcastic            10005
+34  mistral-0.2-7b   qwen-2.5-1.5b            literal            69598
+35  mistral-0.2-7b   qwen-2.5-1.5b          sarcastic              127
+36  mistral-0.2-7b  mistral-0.3-7b            literal                5
+37  mistral-0.2-7b  mistral-0.3-7b          sarcastic            13664
+38  mistral-0.2-7b  mistral-0.2-7b            literal                0
+39  mistral-0.2-7b  mistral-0.2-7b          sarcastic                0
+40    llama-3.2-3b    llama-3.2-3b            literal                0
+41    llama-3.2-3b    llama-3.2-3b          sarcastic                0
+42    llama-3.2-3b     qwen-2.5-7b            literal             3708
+43    llama-3.2-3b     qwen-2.5-7b          sarcastic             1586
+44    llama-3.2-3b   qwen-2.5-1.5b            literal            75796
+45    llama-3.2-3b   qwen-2.5-1.5b          sarcastic                0
+46    llama-3.2-3b  mistral-0.3-7b            literal               83
+47    llama-3.2-3b  mistral-0.3-7b          sarcastic             2365
+48    llama-3.2-3b  mistral-0.2-7b            literal             9687
+49    llama-3.2-3b  mistral-0.2-7b          sarcastic              758
+Saved df with 36 rows.
