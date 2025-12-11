@@ -76,16 +76,20 @@ def prepare_heatmap_df():
         .reindex(full_index, fill_value=0)
         .reset_index(name="n_unique_claims")
         )
-    print(heatmap_df)
-    # heatmap_df = (
-    # combined
-    # .groupby(['model_sender', 'model_receiver', 'label_receiver_agg'])['id']
-    # .nunique()
-    # .reset_index(name='n_unique_claims')
-    # )
-
-    heatmap_df.to_csv('/home/fril/mas/results/input-r2-claim-count.csv', index= False)
+    
+    heatmap_df_count = (
+        combined
+        .groupby(["model_sender", "model_receiver", "label_receiver_agg"])
+        .size()
+        .reindex(full_index, fill_value=0)
+        .reset_index(name="n_claims")
+        )
+    heatmap_df_count.to_csv('/home/fril/mas/results/input-r2-claim-count.csv', index = False)
+    print(f'Saved df with {heatmap_df_count.shape[0]} rows.')
+    heatmap_df.to_csv('/home/fril/mas/results/input-r2-claim-un_count.csv', index= False)
     print(f'Saved df with {heatmap_df.shape[0]} rows.')
+
+
 
 def plot_sarc_distribution(df, kde = True):
     '''
