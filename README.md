@@ -85,15 +85,75 @@ pip install -r requirements.txt
 └── uv.lock
 ```
 
-## Code structure 
- Main part of our experiments are carried out by the two python scripts: `run-eval.py` and `run-eval-r2.py`. They make use of the helper functions provided in `utils`. The `src` folder contains scripts for 
-
- The main results of our experiments are provided in `main-results.ipynb` and further plots and processing in `analysis.py`. 
-
-### Reproducing results
-
-
 ## Data
+
+
+## Code structure 
+Main part of our experiments are carried out by the two python scripts: `run-eval.py` and `run-eval-r2.py`. They make use of the helper functions provided in `utils`. 
+ 
+The `src` folder contains scripts for preprocessing of data, processing of inputs/outputs and formatting of results. 
+
+The configs folder contains yaml files specifying models of interest, their parameters and shared parameters across all models. 
+
+The main results of our experiments are provided in `main-results.ipynb` and further plots and processing in `analysis.py`. 
+
+### Experiments
+
+In order to perform the experiment, follow the steps below. 
+
+**First round: Solo Inference**
+
+You can run the first round experiment for a model by the following: 
+
+```bash
+uv run run-eval.py --model_name mistral-0.2-7b --outdir results/ --repetition 10 --dataset_path data/sarc/sarcasm.csv
+```
+
+You can specify any model from huggingface, given that the model's information is specified in the `models.yaml` file. 
+
+**Curating data for Second round: Pairwise Interaction**
+
+After haven run all first round runs for the models of interest, the data for round 2 needs to be created. 
+
+In order to prepare the input for a given model of round 2, run the following: 
+
+First we create a df that aggregate all model outputs on a model, claim level. 
+```bash
+uv run src/rate.py --round 1
+```
+
+We use this df to decide which claims, outputs to distribute to which models:
+```bash
+uv run src/prepare_round2.py mistral-0.2-7b
+```
+
+This will create a file, which will be the model's input in round 2. 
+
+The input will consists of the claims, where the given agent disagrees highly with another agent. 
+More specifically, over all 10 repetitions, the model needs to predict a claim to be sarcastic less than three times, while another agent predicts the same claim to be sarcastic more than 7 times. Or the other way around. 
+The model is then prompted individually with all the other model's outputs for that instance. 
+
+**Second Round: Pairwise interaction**
+You can run the second round of the experiments with the following: 
+
+```bash
+uv run run-eval-round2.py --model_name mistral-0.3-7b --outdir /home/ --dataset_path /home/input_mistral-0.3-7b.csv
+```
+Make sure to specify the outdir and dataset path accordingly to your wanted setup. 
+
+**Various format of results**
+
+We aggregate the results from all second run runs. The results are on a modelA, modelB, claim level. 
+```bash
+uv run src/rate.py --round 2
+```
+
+Create main results file. This df is what the majority of the results are based on. These are further explored in the `main-results.ipynb` notebook. 
+```bash
+uv run src/results.py
+```
+
+
 
 
 
