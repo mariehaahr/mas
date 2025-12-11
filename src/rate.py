@@ -2,7 +2,12 @@ import pathlib, yaml
 import pandas as pd 
 import argparse
 
-def make_ratio(round_num: int):
+def make_rate(round_num: int):
+    '''
+    Creates the prediction rate for each claim in the respective rounds. 
+    For round 1, this is the proportion of positives a model predicts to in the C reps. 
+    For round 2, this is the proportion of positives a model predicts to in the C reps, given input from other model. 
+    '''
 
     if round_num not in (1, 2):
         raise ValueError(f'round_num must be either 1 or 2, got {round_num}')
@@ -92,4 +97,4 @@ if __name__ == '__main__':
 
     args = parser.parse_args()
     
-    make_ratio(args.round)
+    make_rate(args.round)
