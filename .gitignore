@@ -7,6 +7,11 @@ wheels/
 *.egg-info
 .DS_Store
 
+
+# shell scripts
+*.sh
+
+
 # Virtual environments
 .venv
 uv.lock
