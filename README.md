@@ -2,6 +2,15 @@
 
 ## Project Overview
 
+Large Language models (LLMs) are increasingly deployed in multi-agent systems (MAS) where agents share information and coordinate decisions. 
+However, most existing work focuses on homogenous settings, leaving little understanding of how diverse agents behave when interacting.
+This gap matters because heterogeneous agents differ in architecture, training data, and label biases, which may shape how strongly they influence one another, an effect homogenous MAS evaluation cannot reveal.
+In this paper we introduce a framework for quantifying directional influence between LLM agents by comparing an agent's individual behaviour on a task, to it's behaviour after interaction with another agent on the same task.
+The change in behaviour is measured by the positive prediction rate before and after interaction.
+Across six different models, we find that influence is widespread and often asymmetric. Some agents consistently shift others while remaining resistant themselves.
+When controlling for label biases, new patterns emerge that show how bias alignment amplifies influence, even for highly confident agents. 
+These findings show that heterogeneous MAS can exhibit complex and sometimes unexpected influence dynamics, which do not reduce to simple weak/strong model hierarchies.
+Because such behaviours remain hidden in isolated evaluations, accounting for interaction effects is essential when aiming to build reliable and value-aligned collaborative MAS.
 
 
 ## Set up environment
@@ -28,64 +37,10 @@ We also provide a requirements.txt file pip is preferred. Simply run:
 pip install -r requirements.txt
 ```
 
-
-## Overview of files and folders 
-```
-├── configs
-│   ├── decoding.yaml
-│   ├── default-model.yaml
-│   └── models.yaml
-├── data
-│   └── sarc
-│       ├── dummy.csv
-│       ├── flagged.csv
-│       ├── raw
-│       │   ├── label_list.txt
-│       │   ├── train_labels.txt
-│       │   └── train_text.txt
-│       └── sarcasm.csv
-├── main-results.ipynb
-├── plots
-│   ├── heatmap-claim-count-r2-input.png
-│   ├── heatmap-input-second.png
-│   ├── heatmap-unique-claim-count-r2-input.png
-│   ├── heatmaps-first-results.png
-│   ├── label-dist-all.png
-│   ├── label-distr-r1.png
-│   └── valid-json-dist-r1.png
-├── pyproject.toml
-├── README.md
-├── requirements.txt
-├── results
-│   ├── down_results.csv
-│   ├── first-results-sarc-ratio.csv
-│   ├── input-r2-claim-count.csv
-│   ├── input-r2-claim-un_count.csv
-│   ├── per_receiver_results.csv
-│   ├── results.csv
-│   ├── second-results-sarc-ratio.csv
-│   └── up_results.csv
-├── run-eval-round2.py
-├── run-eval.py
-├── src
-│   ├── analysis.py
-│   ├── influencing.py
-│   ├── prepare_round2.py
-│   ├── preprocessing.py
-│   ├── ratio.py
-│   └── results.py
-├── utils
-│   ├── __utils__.py
-│   ├── data.py
-│   ├── io.py
-│   ├── models.py
-│   ├── prompts.py
-│   ├── runner.py
-│   └── schemas.py
-└── uv.lock
-```
-
 ## Data
+We make use of the Sarcasm dataset provided by the [SocKet Repository](https://github.com/minjechoi/SOCKET). 
+
+The dataset consists of claims with accompanying binary labels, indicating whether each claim is Literal or Sarcastic. 
 
 
 ## Code structure 
@@ -153,8 +108,58 @@ Create main results file. This df is what the majority of the results are based 
 uv run src/results.py
 ```
 
-
-
-
-
-
+## Overview of files and folders 
+```
+├── configs
+│   ├── decoding.yaml
+│   ├── default-model.yaml
+│   └── models.yaml
+├── data
+│   └── sarc
+│       ├── dummy.csv
+│       ├── flagged.csv
+│       ├── raw
+│       │   ├── label_list.txt
+│       │   ├── train_labels.txt
+│       │   └── train_text.txt
+│       └── sarcasm.csv
+├── main-results.ipynb
+├── plots
+│   ├── heatmap-claim-count-r2-input.png
+│   ├── heatmap-input-second.png
+│   ├── heatmap-unique-claim-count-r2-input.png
+│   ├── heatmaps-first-results.png
+│   ├── label-dist-all.png
+│   ├── label-distr-r1.png
+│   └── valid-json-dist-r1.png
+├── pyproject.toml
+├── README.md
+├── requirements.txt
+├── results
+│   ├── down_results.csv
+│   ├── first-results-sarc-ratio.csv
+│   ├── input-r2-claim-count.csv
+│   ├── input-r2-claim-un_count.csv
+│   ├── per_receiver_results.csv
+│   ├── results.csv
+│   ├── second-results-sarc-ratio.csv
+│   └── up_results.csv
+├── run-eval-round2.py
+├── run-eval.py
+├── src
+│   ├── analysis.py
+│   ├── influencing.py
+│   ├── prepare_round2.py
+│   ├── preprocessing.py
+│   ├── ratio.py
+│   └── results.py
+├── utils
+│   ├── __utils__.py
+│   ├── data.py
+│   ├── io.py
+│   ├── models.py
+│   ├── prompts.py
+│   ├── runner.py
+│   └── schemas.py
+└── uv.lock
+```
