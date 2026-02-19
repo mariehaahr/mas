@@ -27,5 +27,5 @@ uv sync
 
 # uv run run-eval.py --model_name mistral-0.3-7b --outdir results/ --repetition 10
 
-uv run run-eval.py --model_name mistral-0.2-7b -limit 5 --outdir results/ --repetition 1 --dataset_path data/sarc/sarcasm2-mistral2.csv
+uv run run-eval.py --model_name llama-3.3-70b -limit 5 --outdir results/ --repetition 1 --dataset_path data/sarc/test_llama_70b.csv
 
