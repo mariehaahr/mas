@@ -1,6 +1,6 @@
 #!/bin/bash
 #SBATCH --job-name=large-llama-test
-#SBATCH --partition=acltr
+#SBATCH --partition=scavenge
 #SBATCH --gres=gpu:1
 #SBATCH --cpus-per-task=4
 #SBATCH --time=3:00:00
