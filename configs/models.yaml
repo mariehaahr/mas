@@ -5,6 +5,11 @@ sampling_presets:
     temperature: 0.6
   mistral3: &mistral3
     temperature: 0.5
+  llama70b: &llama70b
+    temperature: 0.6
+    max_length: 65536
+    max_model_length: 2000
+
 
 profiles:
   llama-3.2-1b:
@@ -36,5 +41,6 @@ profiles:
   llama-3.3-70b:
     model: unsloth/Llama-3.3-70B-Instruct-bnb-4bit
     quantization: bitsandbytes
-    has_default_sampling_params: True
+    has_default_sampling_params: False
+    sampling: *llama70b
 

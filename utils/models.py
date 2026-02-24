@@ -40,22 +40,22 @@ def ensure_local_model(
     return local_dir
 
 
-# def init_llm(model_cfg: dict) -> LLM:
-#     return LLM(
-#         model=model_cfg['model'],
-#         quantization=model_cfg['quantization'],
-#         seed=model_cfg['seed'],
-#         dtype=model_cfg.get('dtype', None),
-#     )
-
-def init_llm(model_cfg: dict) -> LLM:                   #TODO: remove this later
+def init_llm(model_cfg: dict) -> LLM:
     return LLM(
         model=model_cfg['model'],
         quantization=model_cfg['quantization'],
         seed=model_cfg['seed'],
         dtype=model_cfg.get('dtype', None),
-        max_model_len=model_cfg.get('max_model_len', 65536),  
     )
+
+# def init_llm(model_cfg: dict) -> LLM:                   #TODO: remove this later
+#     return LLM(
+#         model=model_cfg['model'],
+#         quantization=model_cfg['quantization'],
+#         seed=model_cfg['seed'],
+#         dtype=model_cfg.get('dtype', None),
+#         max_model_len=model_cfg.get('max_length', 65536),  
+#     )
 
 
 
